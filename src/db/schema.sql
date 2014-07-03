@@ -21,7 +21,8 @@ CREATE TABLE drink_order (
 
 CREATE TABLE recipe ( 
 	id			INTEGER PRIMARY KEY AUTOINCREMENT,
- 	name			TEXT NOT NULL
+ 	name			TEXT NOT NULL,
+	show_in_menu		BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE ingredient (
@@ -56,48 +57,4 @@ CREATE TABLE dispenser (
 	name			VARCHAR(64),
 	rail_position		INTEGER NOT NULL
 );
-
--- test data
-
-INSERT INTO dispenser_type (name, unit_name, unit_plural, unit_size) VALUES ('Optic', 'ml', 'ml', 25);
-INSERT INTO dispenser_type (name, unit_name, unit_plural, unit_size) VALUES ('Mixer tap', 'ml', 'ml', 25);
-INSERT INTO dispenser_type (name, unit_name, unit_plural, unit_size) VALUES ('Dasher', 'dash', 'dashes', 1);
-INSERT INTO dispenser_type (name, unit_name, unit_plural, unit_size) VALUES ('Syringe', 'ml', 'ml', 25);
-INSERT INTO dispenser_type (name, unit_name, unit_plural, unit_size) VALUES ('Conveyor', 'cherry', 'cherries', 1);
-INSERT INTO dispenser_type (name, unit_name, unit_plural, unit_size) VALUES ('Stirrer', 'stir', 'stirs', 1);
-INSERT INTO dispenser_type (name, unit_name, unit_plural, unit_size) VALUES ('Slice dispenser', 'slice', 'slices', 1);
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Vodka', id, 2800, 1 FROM dispenser_type WHERE name = 'Optic';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Gin', id, 3000, 1 FROM dispenser_type WHERE name = 'Optic';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Whisky', id, 3000, 1 FROM dispenser_type WHERE name = 'Optic';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Rum', id, 3500, 1 FROM dispenser_type WHERE name = 'Optic';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Tequila', id, 3000, 1 FROM dispenser_type WHERE name = 'Optic';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Blue Curacao', id, 4000, 0 FROM dispenser_type WHERE name = 'Optic';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Coke', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Tonic water', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Soda water', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Lemonade', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Bitter lemon', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Ginger ale', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Orange juice', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Pineapple juice', id, 2000, 0 FROM dispenser_type WHERE name = 'Mixer tap';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Worcestershire sauce', id, 2000, 0 FROM dispenser_type WHERE name = 'Dasher';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Lime juice', id, 2000, 0 FROM dispenser_type WHERE name = 'Dasher';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Angorstura bitters', id, 2000, 1 FROM dispenser_type WHERE name = 'Dasher';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Grenadine', id, 2000, 1 FROM dispenser_type WHERE name = 'Syringe';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Cherry', id, 2000, 1 FROM dispenser_type WHERE name = 'Conveyor';
-INSERT INTO ingredient (name, dispenser_type_id, dispenser_param, alcoholic) SELECT 'Lemon', id, 2000, 1 FROM dispenser_type WHERE name = 'Slice dispenser';
-
-
-INSERT INTO recipe (name) VALUES ('Gin and tonic');
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 1, 2 FROM recipe r, ingredient i WHERE r.name = 'Gin and tonic' AND i.name = 'Gin'; 
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 2, 4 FROM recipe r, ingredient i WHERE r.name = 'Gin and tonic' AND i.name = 'Tonic water'; 
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 3, 1 FROM recipe r, ingredient i WHERE r.name = 'Gin and tonic' AND i.name = 'Lime juice'; 
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 4, 1 FROM recipe r, ingredient i WHERE r.name = 'Gin and tonic' AND i.name = 'Lemon'; 
-
-INSERT INTO recipe (name) VALUES ('Tequila sunrise');
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 1, 2 FROM recipe r, ingredient i WHERE r.name = 'Tequila sunrise' AND i.name = 'Tequila'; 
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 2, 4 FROM recipe r, ingredient i WHERE r.name = 'Tequila sunrise' AND i.name = 'Orange juice'; 
-INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 3, 1 FROM recipe r, ingredient i WHERE r.name = 'Tequila sunrise' AND i.name = 'Grenadine'; 
-
-
 
