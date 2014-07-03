@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="316.65455"
-     inkscape:cy="265.60893"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="424.37857"
+     inkscape:cy="315.28056"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1635,7 +1635,7 @@
          sodipodi:end="3.1415927"
          sodipodi:start="0"
          transform="matrix(0.87401044,0,0,1,800.53852,462.67044)"
-         d="m -45.254831,166.88306 a 15.202795,12.727921 0 1 1 -30.40559,0 l 15.202795,0 z"
+         d="m -45.254831,166.88306 c 0,7.02943 -6.806523,12.72792 -15.202795,12.72792 -8.396272,0 -15.202795,-5.69849 -15.202795,-12.72792 0,0 0,0 0,0 l 15.202795,0 z"
          sodipodi:ry="12.727921"
          sodipodi:rx="15.202795"
          sodipodi:cy="166.88306"
@@ -1647,7 +1647,7 @@
          sodipodi:end="3.1415927"
          sodipodi:start="0"
          transform="matrix(1,0,0,-1,252.31107,922.90414)"
-         d="m 503.5,293.35065 a 8.125,9 0 1 1 -16.25,0 l 8.125,0 z"
+         d="m 503.5,293.35065 c 0,4.97056 -3.63769,9 -8.125,9 -4.48731,0 -8.125,-4.02944 -8.125,-9 0,0 0,0 0,0 l 8.125,0 z"
          sodipodi:ry="9"
          sodipodi:rx="8.125"
          sodipodi:cy="293.35065"
@@ -1702,10 +1702,49 @@
          x="-546.36469"
          y="772.31635">Cherries / olives</tspan></text>
     <path
-       style="fill:none;stroke:#fc0505;stroke-width:3.47952756;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 553.99999,161.85066 c 0,-18 8,-19 15,-15.5 6.99999,3.5 0.99999,113.99999 0.99999,141.49999 0,27.5 0,38 0,38"
+       style="fill:none;stroke:#fc0505;stroke-width:3.47952747;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 553.99999,161.85066 c 0,-18 -45.17551,-32.4249 -68.79215,-9.13604 -22.99382,22.67469 -9.60661,90.66547 -9.60661,118.16547 0,27.5 0.35355,33.4038 0.35355,33.4038"
        id="path3302"
        inkscape:connector-curvature="0"
-       transform="translate(258.56107,315.22361)" />
+       transform="translate(258.56107,315.22361)"
+       sodipodi:nodetypes="cssc" />
+    <rect
+       style="color:#000000;fill:#000000;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none;stroke-width:3.47952747;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3343"
+       width="14.173228"
+       height="161.96373"
+       x="784.28351"
+       y="480.31769" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-594.19183"
+       y="795.84375"
+       id="text4125"
+       sodipodi:linespacing="125%"
+       transform="matrix(0,-1,1,0,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan4127"
+         x="-594.19183"
+         y="795.84375">Stiring device</tspan></text>
+    <rect
+       y="480.31769"
+       x="823.15851"
+       height="161.96373"
+       width="14.173228"
+       id="rect3812"
+       style="color:#000000;fill:#000000;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none;stroke-width:3.47952747;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <text
+       transform="matrix(0,-1,1,0,0,0)"
+       sodipodi:linespacing="125%"
+       id="text3814"
+       y="833.84375"
+       x="-594.19183"
+       style="font-size:12px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"><tspan
+         y="833.84375"
+         x="-594.19183"
+         id="tspan3816"
+         sodipodi:role="line">Umbrella dropper</tspan></text>
   </g>
 </svg>
