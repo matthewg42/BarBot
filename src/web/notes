@@ -1,0 +1,4 @@
+to run:
+	go run bb1.go
+
+Then browse to http://localhost:8080

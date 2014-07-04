@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Active orders</title>
+
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+
+  
+
+  <div class="span3 achievements-wrapper" style="height:600px; width: 150px; overflow: auto; float:left;">
+    <h1>Pending orders</h1>
+  <br />
+    <table class="table table-striped table-bordered">
+
+
+        {{range .OrderRefs}}
+
+          <tr><td><a href="{{.}}" class="btn btn-default btn-lg" role="button">{{.}}</a></td></tr>
+        {{end}}
+
+    </table>
+    
+  </div>
+    <div style="float: left;">
+    <h2>Drink: {{.DrinkName}}</h2>
+    <h2>Ref: {{.OrderRef}}</h2>
+    <h2>Alcoholic: {{.Alcohol}}</h2>
+    <br />
+    <tr><td><a href="remove/{{.OrderRef}}" class="btn btn-danger btn-lg" role="button">Remove</a></td></tr>
+    <tr><td><a href="make/{{.OrderRef}}" class="btn btn-success btn-lg" role="button">Make</a></td></tr>
+  </div>
+
+
+
+  </body>
+</html>
