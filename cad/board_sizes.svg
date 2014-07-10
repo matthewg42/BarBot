@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.055364235"
-     inkscape:cx="1744.06"
-     inkscape:cy="2616.7452"
+     inkscape:zoom="0.086801941"
+     inkscape:cx="4455.7976"
+     inkscape:cy="2599.1178"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="mm"
@@ -71,7 +71,7 @@
          y="1278.6527" /></text>
     <g
        id="g3192"
-       transform="translate(4648.975,1558.1725)">
+       transform="translate(6349.7622,1558.1725)">
       <rect
          y="-1737.2646"
          x="-5057.3882"
@@ -93,7 +93,7 @@
     </g>
     <g
        id="g3187"
-       transform="translate(4636.2035,1709.3113)">
+       transform="translate(6336.9908,1709.3113)">
       <rect
          style="color:#000000;fill:#803300;fill-opacity:0.50607288;fill-rule:evenodd;stroke:none;stroke-width:3.47952747;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3084"
@@ -137,7 +137,7 @@
     </g>
     <g
        id="g3212"
-       transform="matrix(0,1,-1,0,3659.9185,3949.6715)">
+       transform="matrix(0,1,-1,0,2526.0603,3949.6715)">
       <g
          id="g3207">
         <rect
@@ -162,7 +162,7 @@
     </g>
     <g
        id="g3218"
-       transform="matrix(0,1,-1,0,3627.8093,5329.0372)">
+       transform="matrix(0,1,-1,0,1076.6283,5329.0372)">
       <rect
          style="color:#000000;fill:#803300;fill-opacity:0.50607288;fill-rule:evenodd;stroke:none;stroke-width:3.47952747;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3116"
@@ -184,7 +184,7 @@
     </g>
     <g
        id="g3202"
-       transform="matrix(0,1,-1,0,2868.0603,2648.537)">
+       transform="matrix(0,1,-1,0,1734.2021,2648.537)">
       <rect
          transform="scale(1,-1)"
          y="-1150.4894"
@@ -295,7 +295,7 @@
     </g>
     <g
        id="g3177"
-       transform="matrix(0,1,-1,0,2609.4195,-3479.9362)">
+       transform="matrix(0,1,-1,0,8.6322147,-3479.9362)">
       <rect
          y="-575.08051"
          x="2308.718"
