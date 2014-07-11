@@ -12,3 +12,6 @@ A good bar needs a good soundtrack. BarBot songs should be robot/booze/bar:
 * Tom Waits: Nighthawks at the Diner [album]
 * The Pogues: Streams of Whiskey
 * Whiskey in the Jar
+* The Old Black Rum
+* Reel Big Fish - You and Me and the Bottle Makes Three 
+* Great Big Sea - The Night Pat Murphy Died
