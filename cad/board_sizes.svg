@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.12260474"
-     inkscape:cx="4322.8345"
-     inkscape:cy="2161.4172"
+     inkscape:zoom="0.083093447"
+     inkscape:cx="3847.1584"
+     inkscape:cy="2011.3613"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="mm"
@@ -40,7 +40,14 @@
      inkscape:window-height="877"
      inkscape:window-x="0"
      inkscape:window-y="19"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       orientation="0,1"
+       position="1672.8154,4789.7881"
+       id="guide4446" />
+  </sodipodi:namedview>
   <metadata
      id="metadata4">
     <rdf:RDF>
@@ -49,7 +56,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -61,244 +68,527 @@
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
-       x="526.37915"
-       y="1278.6527"
+       x="117.96594"
+       y="-742.95911"
        id="text4333"
-       sodipodi:linespacing="125%"
-       transform="translate(-408.41321,-2021.6118)"><tspan
+       sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4335"
-         x="526.37915"
-         y="1278.6527" /></text>
+         x="117.96594"
+         y="-742.95911" /></text>
     <g
-       id="g3192"
-       transform="translate(4648.975,1558.1725)"
-       style="fill:#008000">
+       id="g4485">
       <rect
-         y="-1708.9182"
-         x="-5057.3882"
+         y="-150.74571"
+         x="-408.41318"
          height="1672.4409"
          width="2267.7166"
          id="rect3045"
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <text
          sodipodi:linespacing="125%"
          id="text3047"
-         y="-814.0545"
-         x="-3973.0261"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         y="744.11798"
+         x="675.94885"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
          xml:space="preserve"><tspan
-           y="-814.0545"
-           x="-3973.0261"
+           y="744.11798"
+           x="675.94885"
            id="tspan3049"
            sodipodi:role="line">OpticFrontBoard</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3031"
+         y="1477.4525"
+         x="707.64355"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="1477.4525"
+           x="707.64355"
+           id="tspan3033"
+           sodipodi:role="line">640</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3035"
+         y="735.37415"
+         x="1757.8226"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="735.37415"
+           x="1757.8226"
+           id="tspan3037"
+           sodipodi:role="line">472</tspan></text>
     </g>
     <g
-       id="g3187"
-       transform="translate(4636.2035,1677.6577)"
-       style="fill:#008000">
+       id="g4476">
       <rect
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3084"
          width="2267.7166"
          height="1374.8031"
-         x="-5044.6167"
-         y="-3263.2065" />
+         x="-408.41321"
+         y="-1585.5488" />
       <text
          xml:space="preserve"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
-         x="-3946.231"
-         y="-2565.3147"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         x="689.97253"
+         y="-887.65698"
          id="text3086"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
            id="tspan3088"
-           x="-3946.231"
-           y="-2565.3147">OpticBaseBoard</tspan></text>
-    </g>
-    <g
-       id="g3197"
-       transform="translate(5943.2657,-3771.6236)"
-       style="fill:#008000">
-      <g
-         id="g3074"
-         transform="translate(-1281.5187,1521.4262)"
-         style="fill:#008000">
-        <rect
-           y="40.554169"
-           x="-5070.1602"
-           height="318.89764"
-           width="2267.7166"
-           id="rect3096"
-           style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
-        <text
-           sodipodi:linespacing="125%"
-           id="text3098"
-           y="251.32869"
-           x="-3943.7886"
-           style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
-           xml:space="preserve"><tspan
-             y="251.32869"
-             x="-3943.7886"
-             id="tspan3100"
-             sodipodi:role="line">OpticTopBoard</tspan></text>
-      </g>
-    </g>
-    <g
-       id="g3162"
-       transform="matrix(0,1,-1,0,4489.3566,1162.8719)"
-       style="fill:#008000">
-      <rect
-         y="-3747.8992"
-         x="-2688.4209"
-         height="2168.5039"
-         width="3047.2441"
-         id="rect3132"
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+           x="689.97253"
+           y="-887.65698">OpticBaseBoard</tspan></text>
       <text
          sodipodi:linespacing="125%"
-         id="text3134"
-         y="-2539.771"
-         x="-1198.2712"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         id="text3039"
+         y="-255.53604"
+         x="707.64355"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
-           y="-2539.771"
-           x="-1198.2712"
-           id="tspan3136"
-           sodipodi:role="line">RightRearBoard</tspan></text>
+           y="-255.53604"
+           x="707.64355"
+           id="tspan3041"
+           sodipodi:role="line">640</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3043"
+         y="-897.26807"
+         x="1753.736"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-897.26807"
+           x="1753.736"
+           id="tspan3045"
+           sodipodi:role="line">388</tspan></text>
     </g>
     <g
-       id="g3167"
-       transform="matrix(0,1,-1,0,2813.6086,-2106.7359)"
-       style="fill:#008000">
+       id="g4467">
       <rect
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         id="rect3138"
-         width="3004.7244"
-         height="1332.2834"
-         x="623.70667"
-         y="-3195.1433" />
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3096"
+         width="2267.7166"
+         height="318.89764"
+         x="-408.41315"
+         y="-2209.6433" />
       <text
          xml:space="preserve"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
-         x="2071.3367"
-         y="-2514.2273"
-         id="text3140"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         x="717.95844"
+         y="-1998.8687"
+         id="text3098"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
-           id="tspan3142"
-           x="2071.3367"
-           y="-2514.2273">RightTopBoard</tspan></text>
-    </g>
-    <g
-       id="g3182"
-       transform="matrix(0,1,-1,0,3145.5324,332.69806)"
-       style="fill:#008000">
-      <rect
-         y="-1470.936"
-         x="-1815.7273"
-         height="1332.2834"
-         width="3004.7244"
-         id="rect3144"
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+           id="tspan3100"
+           x="717.95844"
+           y="-1998.8687">OpticTopBoard</tspan></text>
       <text
          sodipodi:linespacing="125%"
-         id="text3146"
-         y="-790.02002"
-         x="-368.09729"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         id="text3048"
+         y="-1813.953"
+         x="638.93066"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
-           y="-790.02002"
-           x="-368.09729"
-           id="tspan3148"
-           sodipodi:role="line">RightBaseBoard</tspan></text>
+           y="-1813.953"
+           x="638.93066"
+           id="tspan3050"
+           sodipodi:role="line">640</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3052"
+         y="-2040.5593"
+         x="1869.0707"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-2040.5593"
+           x="1869.0707"
+           id="tspan3054"
+           sodipodi:role="line">90</tspan></text>
     </g>
     <g
-       id="g3172"
-       transform="translate(3914.4743,-1262.7206)"
-       style="fill:#008000">
+       id="g4458">
       <rect
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3116"
+         width="1346.4567"
+         height="531.49603"
+         x="-408.41321"
+         y="-2801.1392" />
+      <text
+         xml:space="preserve"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         x="230.18443"
+         y="-2493.4536"
+         id="text3118"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="230.18443"
+           y="-2493.4536"
+           id="tspan3120">OpticBack</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3056"
+         y="-2307.4426"
+         x="283.31897"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-2307.4426"
+           x="283.31897"
+           id="tspan3058"
+           sodipodi:role="line">380</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3060"
+         y="-2503.9971"
+         x="851.03381"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-2503.9971"
+           x="851.03381"
+           id="tspan3062"
+           sodipodi:role="line">150</tspan></text>
+    </g>
+    <g
+       id="g4448">
+      <g
+         id="use3056"
+         transform="translate(6080.9761,-3471.2202)"
+         style="fill:none;stroke:#000000;stroke-opacity:1">
+        <rect
+           style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="rect3162"
+           width="1346.4567"
+           height="531.49603"
+           x="-5082.9326"
+           y="670.08093" />
+        <text
+           xml:space="preserve"
+           style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans Bold"
+           x="-4444.335"
+           y="977.76648"
+           id="text3164"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             x="-4444.335"
+             y="977.76648"
+             id="tspan3166">OpticBack</tspan></text>
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="1683.319"
+         y="-2307.4426"
+         id="text3078"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3080"
+           x="1683.319"
+           y="-2307.4426">380</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="2251.0337"
+         y="-2503.9971"
+         id="text3082"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3084"
+           x="2251.0337"
+           y="-2503.9971">150</tspan></text>
+    </g>
+    <g
+       id="g4439">
+      <use
+         style="fill:none;stroke:#000000;stroke-opacity:1"
+         height="4322.8345"
+         width="8645.6689"
+         transform="translate(1386.4567,-2.4190019e-5)"
+         id="use3058"
+         xlink:href="#use3056"
+         y="0"
+         x="0" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3087"
+         y="-2307.4426"
+         x="3063.3188"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-2307.4426"
+           x="3063.3188"
+           id="tspan3089"
+           sodipodi:role="line">380</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3091"
+         y="-2503.9971"
+         x="3631.0337"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-2503.9971"
+           x="3631.0337"
+           id="tspan3093"
+           sodipodi:role="line">150</tspan></text>
+    </g>
+    <g
+       id="g4430">
+      <rect
+         y="-2801.1394"
+         x="3791.8193"
+         height="900"
+         width="1332.2834"
+         id="rect3156"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3158"
+         y="-2492.1958"
+         x="4466.5015"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         xml:space="preserve"><tspan
+           y="-2492.1958"
+           x="4466.5015"
+           id="tspan3160"
+           sodipodi:role="line">RightEndBoard</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3095"
+         y="-1938.2648"
+         x="4435.5308"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-1938.2648"
+           x="4435.5308"
+           id="tspan3097"
+           sodipodi:role="line">376</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3099"
+         y="-2342.1182"
+         x="5013.0205"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-2342.1182"
+           x="5013.0205"
+           id="tspan3101"
+           sodipodi:role="line">254</tspan></text>
+    </g>
+    <g
+       id="g4421">
+      <rect
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3150"
          width="3047.2441"
          height="900"
-         x="1269.6285"
-         y="-1538.4187" />
+         x="5184.103"
+         y="-2801.1394" />
       <text
          xml:space="preserve"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
-         x="2820.0483"
-         y="-1064.3708"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         x="6734.5225"
+         y="-2327.0916"
          id="text3152"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
            id="tspan3154"
-           x="2820.0483"
-           y="-1064.3708">RightFrontBoard</tspan></text>
-    </g>
-    <g
-       id="g3177"
-       transform="translate(1483.1014,-2084.3265)"
-       style="fill:#008000">
-      <rect
-         y="-716.81281"
-         x="2308.718"
-         height="900"
-         width="1332.2834"
-         id="rect3156"
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+           x="6734.5225"
+           y="-2327.0916">RightFrontBoard</tspan></text>
       <text
          sodipodi:linespacing="125%"
-         id="text3158"
-         y="-227.86932"
-         x="2983.4001"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         id="text3103"
+         y="-1938.2648"
+         x="6583.7148"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
-           y="-227.86932"
-           x="2983.4001"
-           id="tspan3160"
-           sodipodi:role="line">RightEndBoard</tspan></text>
+           y="-1938.2648"
+           x="6583.7148"
+           id="tspan3105"
+           sodipodi:role="line">860</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3107"
+         y="-2323.3733"
+         x="8127.8721"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-2323.3733"
+           x="8127.8721"
+           id="tspan3109"
+           sodipodi:role="line">254</tspan></text>
     </g>
     <g
-       id="g3218"
-       transform="translate(4674.5194,-3471.2202)"
-       style="fill:#008000">
+       id="g4394"
+       transform="translate(-1300,0)">
       <rect
-         style="color:#000000;fill:#008000;fill-opacity:0.50607287999999995;fill-rule:evenodd;stroke:none;stroke-width:3.47952746999999984;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         id="rect3116"
-         width="1346.4567"
-         height="531.49603"
-         x="-5082.9326"
-         y="670.08093" />
+         transform="matrix(0,1,-1,0,0,0)"
+         y="-4598.4165"
+         x="-1483.0292"
+         height="1332.2834"
+         width="3004.7244"
+         id="rect3144"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
       <text
+         transform="matrix(0,1,-1,0,0,0)"
+         sodipodi:linespacing="125%"
+         id="text3146"
+         y="-3917.5005"
+         x="-35.399231"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         xml:space="preserve"><tspan
+           y="-3917.5005"
+           x="-35.399231"
+           id="tspan3148"
+           sodipodi:role="line">RightBaseBoard</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3111"
+         y="-1400.775"
+         x="3951.8503"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-1400.775"
+           x="3951.8503"
+           id="tspan3113"
+           sodipodi:role="line">376</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3115"
+         y="17.364851"
+         x="4487.5483"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="17.364851"
+           x="4487.5483"
+           id="tspan3117"
+           sodipodi:role="line">848</tspan></text>
+    </g>
+    <g
+       id="g4403"
+       transform="translate(-1300,0)">
+      <rect
+         transform="matrix(0,1,-1,0,0,0)"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3138"
+         width="3004.7244"
+         height="1332.2834"
+         x="-1483.0292"
+         y="-6008.752" />
+      <text
+         transform="matrix(0,1,-1,0,0,0)"
          xml:space="preserve"
-         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#008000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
-         x="-4444.335"
-         y="977.76648"
-         id="text3118"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         x="-35.399231"
+         y="-5327.8359"
+         id="text3140"
          sodipodi:linespacing="125%"><tspan
            sodipodi:role="line"
-           x="-4444.335"
-           y="977.76648"
-           id="tspan3120">OpticBack</tspan></text>
+           id="tspan3142"
+           x="-35.399231"
+           y="-5327.8359">RightTopBoard</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="5371.8506"
+         y="-1400.775"
+         id="text3119"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3121"
+           x="5371.8506"
+           y="-1400.775">376</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="5907.5483"
+         y="17.364851"
+         id="text3123"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3125"
+           x="5907.5483"
+           y="17.364851">848</tspan></text>
     </g>
-    <use
-       x="0"
-       y="0"
-       xlink:href="#g3218"
-       id="use3056"
-       transform="translate(1406.4567,-2.4190019e-5)"
-       width="8645.6689"
-       height="4322.8345"
-       style="fill:#008000" />
-    <use
-       x="0"
-       y="0"
-       xlink:href="#use3056"
-       id="use3058"
-       transform="translate(1386.4567,-2.4190019e-5)"
-       width="8645.6689"
-       height="4322.8345"
-       style="fill:#008000" />
+    <g
+       id="g4412"
+       transform="translate(-1300,0)">
+      <rect
+         transform="matrix(0,1,-1,0,0,0)"
+         y="-8237.2559"
+         x="-1525.549"
+         height="2168.5039"
+         width="3047.2441"
+         id="rect3132"
+         style="color:#000000;fill:none;stroke:#000000;stroke-width:3.47952747;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <text
+         transform="matrix(0,1,-1,0,0,0)"
+         sodipodi:linespacing="125%"
+         id="text3134"
+         y="-7029.1274"
+         x="-35.399342"
+         style="font-size:144px;font-style:normal;font-weight:bold;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:1.70787406;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+         xml:space="preserve"><tspan
+           y="-7029.1274"
+           x="-35.399342"
+           id="tspan3136"
+           sodipodi:role="line">RightRearBoard</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3127"
+         y="-1436.879"
+         x="7148.9966"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="-1436.879"
+           x="7148.9966"
+           id="tspan3129"
+           sodipodi:role="line">612</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text3131"
+         y="23.382185"
+         x="8111.9756"
+         style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="23.382185"
+           x="8111.9756"
+           id="tspan3133"
+           sodipodi:role="line">860</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:7.08661413;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:21.2598424, 7.08661413;stroke-dashoffset:0"
+       d="m -416.92299,-1773.5804 8654.44419,0"
+       id="path3944"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:7.08661461;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:21.25984242, 7.08661413;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3946"
+       width="8638.583"
+       height="4315.748"
+       x="-404.8699"
+       y="-2797.5962" />
+    <text
+       xml:space="preserve"
+       style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       x="-606.9848"
+       y="-304.56204"
+       id="text4382"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4384"
+         x="-606.9848"
+         y="-304.56204"
+         style="font-size:90px">930</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4386"
+       y="-2284.562"
+       x="-586.9848"
+       style="font-size:72px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       xml:space="preserve"><tspan
+         style="font-size:90px"
+         y="-2284.562"
+         x="-586.9848"
+         id="tspan4388"
+         sodipodi:role="line">290</tspan></text>
   </g>
 </svg>
