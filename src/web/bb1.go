@@ -9,6 +9,9 @@ import (
   "time"
   "strings"
   _ "github.com/mattn/go-sqlite3"
+  "github.com/tarm/goserial"
+  "io"
+  "strconv"
 )
 
 const ORDER_FMT = "%05d"
@@ -49,6 +52,8 @@ type OrderDetails struct {
   OrderRef  string
   OrderRefs []string  // list of order refs for order selection list on left of screen
 }
+
+var MakeDrinkChan chan int
 
 // showMenu displays the list of available drinks to the user
 // TODO: limit display to only those drinks that can currently be made
@@ -170,7 +175,9 @@ func orderListHandler(w http.ResponseWriter, r *http.Request) {
           return
 
         case strings.HasPrefix(p, "make/"):
-          makeOrder(db, w, r, p[len("make/"):])
+          if !makeOrder(db, w, r, p[len("make/"):]) {
+            http.NotFound(w, r)
+          }
           return
       }
 
@@ -224,9 +231,16 @@ func removeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) b
 
 
 func makeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) bool {
-  // TODO
+  // TODO - don't block (error instead)
+  //      - update database 
   
-  return false
+  drink_id, err := strconv.Atoi(p)
+  if err != nil {
+    return false   
+  } 
+  
+  MakeDrinkChan <- drink_id
+  return true
 }
 
 
@@ -304,7 +318,9 @@ func orderDrinkHandler(w http.ResponseWriter, r *http.Request) {
 
     // Order reference (id)
     row = tx.QueryRow("select max(id) from drink_order")
-    err = row.Scan(&orderLogged.OrderId)
+    var order_id int
+    err = row.Scan(&order_id)
+    orderLogged.OrderId = fmt.Sprintf(ORDER_FMT, order_id)
     if err == sql.ErrNoRows {
       http.NotFound(w, r)
       return
@@ -326,12 +342,45 @@ func getDBConnection() *sql.DB {
   return db
 }
 
+// BBSerial goroutine manages serial communications with barbot
+func BBSerial(c chan int) {
+  
+  // Open serial port
+  port := &serial.Config{Name: "/dev/ttyS0", Baud: 115200} // TODO: belongs in a config file or maybe database
+  s, err := serial.OpenPort(port)
+  if err != nil {
+    panic(fmt.Sprintf("BBSerial failed to open serial port: %v", err))
+  }
+  
+  for {
+    select {
+      case drink_id := <-c:
+        SendDrink(drink_id, s)
+    }
+  }
+  
+}
+
+
+// SendDrink looks up the required ingredients for drink_id, and transmits the necessary instructions over serial. Or it will do.
+func SendDrink(drink_id int, s io.ReadWriteCloser) {
+  // TODO
+  
+  _, err := s.Write([]byte(fmt.Sprintf("MAKE DRINK %d\n", drink_id)))
+  if err != nil {
+    panic(fmt.Sprintf("SendDrink failed to transmit instruction: %v", err))
+  }
+}
+
 func main() { 
   http.HandleFunc("/menu/", drinksMenuHandler)
   http.HandleFunc("/order/", orderDrinkHandler)
   http.HandleFunc("/orderlist/", orderListHandler) // TODO: password protect (e.g. using go-http-auth)
   http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
   http.Handle("/", http.FileServer(http.Dir("static")))
+  
+  MakeDrinkChan = make(chan int);
+  go BBSerial(MakeDrinkChan)
 
   http.ListenAndServe(":8080", nil)
 }
