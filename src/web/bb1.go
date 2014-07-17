@@ -53,6 +53,18 @@ type OrderDetails struct {
   OrderRefs []string  // list of order refs for order selection list on left of screen
 }
 
+type DispenserIngredients struct {
+  Id int
+  Name string
+  Current bool // Currently selected
+}
+
+type DispenserDetails struct {
+  Id  int
+  Name string
+  Ingredients []DispenserIngredients
+}
+
 var MakeDrinkChan chan int
 
 // showMenu displays the list of available drinks to the user
@@ -81,7 +93,7 @@ func showMenu(db *sql.DB, w http.ResponseWriter) {
       t.Execute(w, menu)
 }
 
-// showMenuItem shows details of a drink selected from the menu (ingredients, etc)
+// showMenuItem shows details of a  In   int // current ingrediant drink selected from the menu (ingredients, etc)
 func showMenuItem(db *sql.DB, w http.ResponseWriter, r *http.Request) {
       var menuitem MenuItem
       drink_id := r.URL.Path[len("/menu/"):]
@@ -131,13 +143,93 @@ func drinksMenuHandler(w http.ResponseWriter, r *http.Request) {
     // Open database
     db := getDBConnection()
     defer db.Close()
-
-
+    
     if len(r.URL.Path) <= len("/menu/") {
       showMenu(db, w)
     } else {
       showMenuItem(db, w, r)
     }
+}
+
+func adminHandler(w http.ResponseWriter, r *http.Request) {
+  
+  // Default admin page is dispenser config for now. So if no subpage is specified, redirect to that
+  if (r.URL.Path == "/admin") || (r.URL.Path == "/admin/") {
+    http.Redirect(w, r, "/admin/dispenser/", http.StatusSeeOther)
+    return
+  }
+  
+  req_page := r.URL.Path[len("/admin/"):]
+  
+  switch {
+    case strings.HasPrefix(req_page, "dispenser/"):
+      adminDispenser(w, r, req_page[len("dispenser/"):])
+      return;
+      
+    default:
+      http.NotFound(w, r)
+      return
+  }
+}
+ 
+// adminDispenser shows the despenser selection page of the admin interface
+func adminDispenser(w http.ResponseWriter, r *http.Request, param string) {
+  
+  tmpl, _ := template.ParseFiles("admin_header.html", "admin_dispenser.html", "admin_footer.html")
+
+  // Open database
+  db := getDBConnection()
+  defer db.Close()  
+
+  if (param == "update") {
+    // TODO - update DB based on new selection.
+    http.NotFound(w, r)
+    return
+  }
+  
+  var dispensers = make([]DispenserDetails,21) // TODO: Do not hard code number of dispenersers...
+  
+  // Get a list of all dispensers, possible ingrediants and current ingrediant
+  sql := `
+    select
+      d.id as dispenser_id,
+      d.name as dispenser_name,
+      case when d.ingredient_id = i.id then 1 else 0 end as current,
+      i.id as ingredient_id,
+      i.name as ingredient_name
+    from dispenser d 
+    left outer join ingredient i on d.dispenser_type_id = i.dispenser_type_id
+    order by d.id, i.name
+  `
+
+  rows, err := db.Query(sql)
+  if err != nil {
+    // TODO
+    panic(fmt.Sprintf("%v", err))
+  }
+  defer rows.Close()
+
+  for rows.Next() {
+    var ingr DispenserIngredients
+    var dispenser_id int
+    var dispenser_name string
+    var current int
+      
+    rows.Scan(&dispenser_id, &dispenser_name, &current, &ingr.Id, &ingr.Name)
+    if current==1 {
+      ingr.Current = true
+    } else {
+      ingr.Current = false
+    }
+    dispensers[dispenser_id].Ingredients = append(dispensers[dispenser_id].Ingredients, ingr)
+    dispensers[dispenser_id].Name = dispenser_name
+    dispensers[dispenser_id].Id = dispenser_id
+  }
+  
+  tmpl.ExecuteTemplate(w, "admin_header", nil)
+  tmpl.ExecuteTemplate(w, "admin_dispenser", dispensers)
+  tmpl.ExecuteTemplate(w, "admin_footer", nil)
+  return
 }
 
 // orderListHandler handles requests to /orderlist/
@@ -376,6 +468,7 @@ func main() {
   http.HandleFunc("/menu/", drinksMenuHandler)
   http.HandleFunc("/order/", orderDrinkHandler)
   http.HandleFunc("/orderlist/", orderListHandler) // TODO: password protect (e.g. using go-http-auth)
+  http.HandleFunc("/admin/", adminHandler)
   http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
   http.Handle("/", http.FileServer(http.Dir("static")))
   
