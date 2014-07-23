@@ -29,13 +29,15 @@
     </table>
     
   </div>
-    <div style="float: left;">
+  <div style="float: left;">
+    {{if .DrinkName}}
     <h2>Drink: {{.DrinkName}}</h2>
     <h2>Ref: {{.OrderRef}}</h2>
     <h2>Alcoholic: {{.Alcohol}}</h2>
     <br />
     <tr><td><a href="remove/{{.OrderRef}}" class="btn btn-danger btn-lg" role="button">Remove</a></td></tr>
     <tr><td><a href="make/{{.OrderRef}}" class="btn btn-success btn-lg" role="button">Make</a></td></tr>
+    {{end}}
   </div>
 
 

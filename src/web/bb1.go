@@ -174,21 +174,35 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
  
 // adminDispenser shows the despenser selection page of the admin interface
 func adminDispenser(w http.ResponseWriter, r *http.Request, param string) {
-  
+
   tmpl, _ := template.ParseFiles("admin_header.html", "admin_dispenser.html", "admin_footer.html")
 
   // Open database
   db := getDBConnection()
-  defer db.Close()  
+  defer db.Close()
 
   if (param == "update") {
-    // TODO - update DB based on new selection.
-    http.NotFound(w, r)
+    // returned form is dispenser_id=ingredient_id
+    r.ParseForm()
+
+    for dispenser_id, ingredient_id := range r.Form {
+      _, err := db.Exec(
+              "update dispenser set ingredient_id = ? where id = ?",
+              ingredient_id[0],
+              dispenser_id,
+      )
+      if err != nil {
+        panic(fmt.Sprintf("Failed to update db: %v", err))
+      }
+
+    }
+
+    http.Redirect(w, r, "/admin/dispenser/", http.StatusSeeOther)
     return
   }
-  
+
   var dispensers = make([]DispenserDetails,21) // TODO: Do not hard code number of dispenersers...
-  
+
   // Get a list of all dispensers, possible ingrediants and current ingrediant
   sql := `
     select

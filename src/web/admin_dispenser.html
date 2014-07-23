@@ -1,6 +1,6 @@
 {{define "admin_dispenser"}}
       <form role="form" action="/admin/dispenser/update" class="form-horizontal" method="post">
-      
+
       {{range .}}
         {{if .Name}}
           <div class="form-group">
@@ -10,13 +10,13 @@
               {{range .Ingredients}}
                 {{if .Current}}
                   <option value="{{.Id}}" selected>{{.Name}}</option> 
-                {{else}}          
+                {{else}}
                   <option value="{{.Id}}">{{.Name}}</option>
                 {{end}}
               {{end}}
               </select>
             </div>
-          </div>    
+          </div>
         {{end}}
       {{end}}
 
@@ -25,7 +25,5 @@
             <button type="submit" class="btn btn-default">Submit</button>
           </div>
         </div>
-
-
 
 {{end}}
