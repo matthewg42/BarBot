@@ -1,0 +1,29 @@
+{{define "admin_dispenser"}}
+      <form role="form" action="/admin/dispenser/update" class="form-horizontal" method="post">
+
+      {{range .}}
+        {{if .Name}}
+          <div class="form-group">
+            <label for="{{.Name}}" class="col-sm-3 control-label">{{.Name}}</label>
+            <div class="col-sm-8">
+              <select name="{{.Id}}" class="form-control" id="{{.Name}}">
+              {{range .Ingredients}}
+                {{if .Current}}
+                  <option value="{{.Id}}" selected>{{.Name}}</option> 
+                {{else}}
+                  <option value="{{.Id}}">{{.Name}}</option>
+                {{end}}
+              {{end}}
+              </select>
+            </div>
+          </div>
+        {{end}}
+      {{end}}
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Submit</button>
+          </div>
+        </div>
+
+{{end}}

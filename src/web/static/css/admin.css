@@ -1,0 +1,26 @@
+#admin_container
+{
+  width:100%;
+}
+
+#admin_header
+{
+  background-color:#FFFFFF;
+}
+
+#admin_menu
+{
+  background-color:#195905;
+  color:#FFFFFF;
+  height:200px;
+  width:200px;
+  float:left;
+}
+
+#admin_body
+{
+  background-color:#FFFFFF;
+  height:200px;
+  width:500px;
+  float:left;
+}
