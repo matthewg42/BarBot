@@ -18,9 +18,10 @@ class COptic : public CDispenser
   public:
      COptic(uint8_t servo_pin);
      ~COptic();
-     uint8_t get_dispener_type();
-     bool    dispense(uint8_t qty);
-     bool    loop();
+     uint8_t          get_dispener_type();
+     bool             dispense(uint8_t qty);
+     bool             loop();
+     dispenser_state  get_status();
      
   private:
     Servo _servo;

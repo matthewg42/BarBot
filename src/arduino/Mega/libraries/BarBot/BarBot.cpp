@@ -57,6 +57,9 @@ BarBot::BarBot()
     }
 
   }
+  
+  _state = BarBot::IDLE;
+  _current_instruction = 0;
 }
 
 BarBot::~BarBot()
@@ -67,8 +70,13 @@ BarBot::~BarBot()
 }
 
 // Add an instruction to be carried out
+// Returns: true if instruction added, false otherwise
 bool BarBot::instruction_add(instruction_type instruction, uint16_t param1, uint16_t param2)
 {
+  // For DISPENSE instructions, param1 is the dispenser_id - ensure this is valid.
+  if ((instruction == BarBot::DISPENSE) && (param1 >= DISPENSER_COUNT))
+    return false;    
+  
   if (_instruction_count < MAX_INSTRUCTIONS)
   {
     _instructions[_instruction_count].type   = instruction;
@@ -92,15 +100,62 @@ bool BarBot::instructions_clear()
 }
 
 // Make the drink!
+// Returns true if drink making has started, false otherwise
 bool BarBot::go()
-{
+{  
+  if (_state != BarBot::IDLE)
+    return false;
   
-  return false;
+  if (_instruction_count <= 0)
+    return false;
+  
+  _current_instruction = 0;
+  
+  
+  exec_instruction(_current_instruction);  
+    
+  _state = BarBot::RUNNING;
+    
+  
+  return true;
+}
+
+bool BarBot::exec_instruction(uint16_t ins)
+{
+  instruction *cmd = &_instructions[ins];
+  char buf[25]="";
+  
+  if (ins >= _instruction_count)
+    return false;
+  
+  sprintf(buf, "exec ins[%d], typ[%d]", ins, cmd->type);
+  debug(buf);
+  
+  switch (cmd->type)
+  {
+    case NOP:
+      break;
+      
+    case MOVE:
+      break;
+      
+    case DISPENSE:
+     _dispeners[cmd->param1]->dispense(cmd->param2); // nb. instruction_add validated that param1 was in bounds.
+     break;   
+     
+    case WAIT:
+      _wait_inst_start = millis();
+      break;
+  }
+  
+  return true;  
 }
 
 // Needs to be called regulary whilst barbot is in action!
 bool BarBot::loop()
 {
+  instruction *cmd = &_instructions[_current_instruction];
+  bool done = false;
   
   for (int ix=1; ix < DISPENSER_COUNT; ix++)
     if (_dispeners[ix] != NULL)
@@ -108,8 +163,45 @@ bool BarBot::loop()
       _dispeners[ix]->loop();
     }     
       
-    
+  // If running, find out if the last executed insturction has finished 
+  if (_state == BarBot::RUNNING)
+  {
+    switch (cmd->type)
+    {
+      case NOP:
+        done = true;
+        break;
+        
+      case MOVE:
+        // TODO
+        break;
+        
+      case DISPENSE:
+        if (_dispeners[cmd->param1]->get_status() == CDispenser::IDLE)
+          done = true;
+        break;
+        
+      case WAIT:
+        if ((millis()-_wait_inst_start) >= cmd->param1)
+          done = true;
+        break;
+    }
+        
+    if (done)
+    {
+      if (!exec_instruction(++_current_instruction))
+      {
+        // exec_instruction returns false when there are no more instructions to execute.
+        debug("Done! setting state=idle");
+        _state = BarBot::IDLE;
+      }
+    }
+  }
   
   return false;
 }
-    
+   
+void debug(char *msg)
+{
+  Serial.println(msg);
+}

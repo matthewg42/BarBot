@@ -41,8 +41,13 @@ bool COptic::loop()
   if (millis()-_dispense_start >= OPTIC_DISPENSE_TIME)
   {
     _servo.write(OPTIC_IDLE_POSITION);
-    _state != COptic::IDLE;
+    _state = COptic::IDLE;
   }
   
   return true;
+}
+
+CDispenser::dispenser_state COptic::get_status()
+{
+  return _state;
 }

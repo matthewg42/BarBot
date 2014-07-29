@@ -6,7 +6,7 @@
 
 #include "Arduino.h"
 #include <avr/pgmspace.h>
-
+void debug(char *msg);
 
 class CDispenser
 {
@@ -33,9 +33,10 @@ class CDispenser
     };
 
     CDispenser();
-    virtual uint8_t get_dispener_type()   = 0;
-    virtual bool    dispense(uint8_t qty) = 0;
-    virtual bool    loop()                = 0;
+    virtual uint8_t         get_dispener_type()   = 0;
+    virtual bool            dispense(uint8_t qty) = 0;
+    virtual bool            loop()                = 0;
+    virtual dispenser_state get_status()          = 0; 
 
     
   protected:
