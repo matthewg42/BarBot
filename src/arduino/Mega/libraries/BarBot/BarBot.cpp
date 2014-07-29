@@ -58,6 +58,14 @@ BarBot::BarBot()
 
   }
   
+  // Stepper for platform movement
+  _stepper = new AccelStepper(AccelStepper::DRIVER);
+  _stepper->setMaxSpeed(1000);
+  _stepper->setAcceleration(1000);
+  _stepper->setPinsInverted(false,false,false,false,true);
+  _stepper->setEnablePin(4);
+  _stepper->disableOutputs();
+  
   _state = BarBot::IDLE;
   _current_instruction = 0;
 }
@@ -137,6 +145,8 @@ bool BarBot::exec_instruction(uint16_t ins)
       break;
       
     case MOVE:
+      _move_start = millis();
+      _stepper->moveTo(cmd->param1);
       break;
       
     case DISPENSE:
@@ -163,6 +173,8 @@ bool BarBot::loop()
       _dispeners[ix]->loop();
     }     
       
+  _stepper->run();
+
   // If running, find out if the last executed insturction has finished 
   if (_state == BarBot::RUNNING)
   {
@@ -173,7 +185,19 @@ bool BarBot::loop()
         break;
         
       case MOVE:
-        // TODO
+        if (_stepper->distanceToGo() == 0)
+        {
+          _stepper->disableOutputs();
+          digitalWrite(13, LOW);            // TODO: 13?
+          done = true;
+        }
+        if ((millis()-_move_start) > MAX_MOVE_TIME)
+        {
+          debug("Move timeout!");
+          _stepper->disableOutputs();
+          digitalWrite(13, LOW);            // TODO: 13?
+          _state = BarBot::FAULT;
+        } 
         break;
         
       case DISPENSE:

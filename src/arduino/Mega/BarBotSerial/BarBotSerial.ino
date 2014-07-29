@@ -1,4 +1,7 @@
+#include <AccelStepper.h>
+
 #include <Servo.h>
+
 #include <BarBot.h>
 
 BarBot *bb;

@@ -30,6 +30,3 @@ class COptic : public CDispenser
 };
 
 #endif
-
-// /usr/share/arduino/libraries/Servo/Servo.h
-// /usr/share/arduino/hardware/arduino/cores/arduino/Arduino.h
