@@ -6,7 +6,7 @@ To run the web interface:
 
     export GOHOME=$HOME/project/go
 
-4. Install sqlite3 go library:
+4. Install sqlite3 & goserial go libraries:
 
     $ cd $GOHOME
     $ go get github.com/mattn/go-sqlite3

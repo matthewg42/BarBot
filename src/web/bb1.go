@@ -65,6 +65,18 @@ type DispenserDetails struct {
   Ingredients []DispenserIngredients
 }
 
+const (
+  DISPENSER_OPTIC    = 1
+  DISPENSER_MIXER    = 2 
+  DISPENSER_DASHER   = 3
+  DISPENSER_SYRINGE  = 4
+  DISPENSER_CONVEYOR = 5
+  DISPENSER_STIRRER  = 6
+  DISPENSER_SLICE    = 7
+  DISPENSER_UMBRELLA = 8
+)
+
+
 var MakeDrinkChan chan int
 
 // showMenu displays the list of available drinks to the user
@@ -340,12 +352,12 @@ func makeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) boo
   // TODO - don't block (error instead)
   //      - update database 
   
-  drink_id, err := strconv.Atoi(p)
+  drink_order_id, err := strconv.Atoi(p)
   if err != nil {
     return false   
   } 
   
-  MakeDrinkChan <- drink_id
+  MakeDrinkChan <- drink_order_id
   return true
 }
 
@@ -394,24 +406,24 @@ func orderDrinkHandler(w http.ResponseWriter, r *http.Request) {
    tx, _ := db.Begin()
    defer tx.Rollback()
 
-   drink_id := r.URL.Path[len("/order/"):]
+   recipe_id := r.URL.Path[len("/order/"):]
 
    // Check drink is known
    var menuitem MenuItem
-   row := tx.QueryRow("select id, name from recipe where id = ?", drink_id)
+   row := tx.QueryRow("select id, name from recipe where id = ?", recipe_id)
    err = row.Scan(&menuitem.Id, &menuitem.DrinkName)
    if err == sql.ErrNoRows {
      http.NotFound(w, r)
      return
    }
 
-   alcoholic := recipeContainsAlcohol(tx, drink_id)
+   alcoholic := recipeContainsAlcohol(tx, recipe_id)
 
    // Generate order
    _, insertErr := tx.Exec(
      "insert into drink_order (create_ts, recipe_id, alcohol, id_checked, cancelled) VALUES (?, ?, ?, ?, ?)",
      int32(time.Now().Unix()),
-     drink_id,
+     recipe_id,
      alcoholic,
      false,
      false,
@@ -460,22 +472,131 @@ func BBSerial(c chan int) {
   
   for {
     select {
-      case drink_id := <-c:
-        SendDrink(drink_id, s)
+      case drink_order_id := <-c:
+        SendDrink(drink_order_id, s)
     }
   }
   
 }
 
-
-// SendDrink looks up the required ingredients for drink_id, and transmits the necessary instructions over serial. Or it will do.
-func SendDrink(drink_id int, s io.ReadWriteCloser) {
-  // TODO
+// getCommandList takes a drink_order_id, and returns a set of insturctions to be sent to barbot to make it
+func getCommandList(drink_order_id int) ([]string, int) {
+/*
+ * Instructions generated:
+ *   Mnnnnn               - move to rail position nnnnn
+ *   Wnnnnn               - wait for nnnnn ms
+ *   Dnn:xxxx             - Dispense using dispenser nn, with parameter xxxx
+ * 
+ */
   
-  _, err := s.Write([]byte(fmt.Sprintf("MAKE DRINK %d\n", drink_id)))
+   db := getDBConnection()
+   defer db.Close()
+ 
+   // Get a list of ingrediants required
+   sqlstr := `select 
+                i.id,
+                ri.qty,
+                i.dispenser_param,
+                dt.id
+              from drink_order do
+              inner join recipe r on r.id = do.recipe_id
+              inner join recipe_ingredient ri on ri.recipe_id = r.id
+              inner join ingredient i on i.id = ri.ingredient_id
+              inner join dispenser_type dt on dt.id = i.dispenser_type_id
+              where do.id = ?
+              order by ri.seq`
+
+  rows, err := db.Query(sqlstr, drink_order_id)
   if err != nil {
-    panic(fmt.Sprintf("SendDrink failed to transmit instruction: %v", err))
+    panic(fmt.Sprintf("%v", err))
   }
+  defer rows.Close()
+
+  
+  commandList := make([]string, 1)
+  
+  for rows.Next() {
+    var ingredient_id int
+    var qty int
+    var dispenser_param int
+    var dispenser_type int
+      
+    rows.Scan(&ingredient_id, &qty, &dispenser_param, &dispenser_type)
+    
+    rail_position, dispenser_id := getIngredientPosition(ingredient_id)
+    if dispenser_id == -1 {
+      return nil, -1
+    }
+
+    // move to the correct position
+    commandList = append(commandList, fmt.Sprintf("M%d", rail_position))
+
+    // Dispense
+    for qty > 0 {
+      qty--
+      commandList = append(commandList, fmt.Sprintf("D%d:%d", dispenser_id, dispenser_param))
+
+      // Some dispenersers require a delay before moving onto the next dispenerser, others dont's. The ones that do require a 
+      // delay need it because the arduino doesn't know when the operation has finished (no feedback yet).
+      switch dispenser_type {
+        case DISPENSER_DASHER, DISPENSER_CONVEYOR, DISPENSER_STIRRER, DISPENSER_SLICE, DISPENSER_UMBRELLA:
+          commandList = append(commandList, fmt.Sprintf("W%d", dispenser_param))
+      }
+    }
+  }
+
+  return commandList, 0
+}
+
+// getIngredientPosition returns a suitable rail_position and dispenser_id for the requested ingrediant
+func getIngredientPosition(ingredient_id int) (int, int) {
+  
+   db := getDBConnection()
+   defer db.Close()
+  
+  sqlstr := `select d.id, d.rail_position
+             from dispenser d
+             inner join ingredient i on i.id = d.ingredient_id
+             where i.id = ?
+             `
+  row := db.QueryRow(sqlstr, ingredient_id)
+
+  var dispenser_id int
+  var rail_position int
+
+  err := row.Scan(&dispenser_id, &rail_position)
+  if err == sql.ErrNoRows {
+    fmt.Printf("getIngredientPosition: ingredient_id = %d not found!\n", ingredient_id)
+    return -1, -1
+  }
+  if err != nil {
+    panic(fmt.Sprintf("getIngredientPosition failed: %v", err))
+  }
+  fmt.Printf("getIngredientPosition: ingredient_id=[%d] is on dispenser_id=[%d], position=[%d]\n", ingredient_id, dispenser_id, rail_position)
+
+  return rail_position,dispenser_id
+}
+
+
+// SendDrink looks up the required ingredients for drink_order_id, and transmits the necessary instructions over serial. Or it will do.
+func SendDrink(drink_order_id int, s io.ReadWriteCloser) {
+
+  fmt.Printf("SendDrink: making drink_order_id=%d\n", drink_order_id)
+  cmdList, ret := getCommandList(drink_order_id)
+  
+  if ret != 0 {
+    fmt.Printf("SendDrink: failed to generate command list!\n")
+    return
+  }
+
+  for _, cmd := range cmdList {
+    fmt.Printf("> %s\n", cmd)
+    _, err := s.Write([]byte(fmt.Sprintf("%s\n", cmd)))
+    if err != nil {
+      panic(fmt.Sprintf("SendDrink failed to transmit instruction: %v", err))
+    }
+  }
+
 }
 
 func main() { 
