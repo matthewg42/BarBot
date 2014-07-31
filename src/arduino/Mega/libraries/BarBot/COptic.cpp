@@ -47,6 +47,12 @@ bool COptic::loop()
   return true;
 }
 
+void COptic::stop()
+{
+  _servo.write(OPTIC_IDLE_POSITION);
+  _state = COptic::IDLE; 
+}
+
 CDispenser::dispenser_state COptic::get_status()
 {
   return _state;
