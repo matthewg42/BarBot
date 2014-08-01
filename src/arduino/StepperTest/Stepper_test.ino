@@ -232,7 +232,7 @@ void serialEvent()
       
     case 'J':
     case 'j':
-      analogWrite(5,50);
+      analogWrite(5,100);
       analogWrite(6,0);
       delay(500);
       analogWrite(5,0);
@@ -242,7 +242,7 @@ void serialEvent()
     case 'K':
     case 'k':
       analogWrite(5,0);
-      analogWrite(6,50);
+      analogWrite(6,100);
       delay(500);
       analogWrite(5,0);
       analogWrite(6,0);
@@ -284,7 +284,10 @@ void serialEvent()
     case 'P':
     case 'p':
       digitalWrite(23,HIGH);
-      delay(1000);
+      while(!digitalRead(22));
+      while(digitalRead(22));
+      while(!digitalRead(22));
+      while(digitalRead(22));
       digitalWrite(23,LOW);
       break;
 
@@ -292,7 +295,10 @@ void serialEvent()
     case 'Q':
     case 'q':
       digitalWrite(25,HIGH);
-      delay(1000);
+      while(!digitalRead(24));
+      while(digitalRead(24));
+      while(!digitalRead(24));
+      while(digitalRead(24));
       digitalWrite(25,LOW);
       break;
 
@@ -300,7 +306,10 @@ void serialEvent()
     case 'R':
     case 'r':
       digitalWrite(27,HIGH);
-      delay(1000);
+      while(!digitalRead(26));
+      while(digitalRead(26));
+      while(!digitalRead(26));
+      while(digitalRead(26));
       digitalWrite(27,LOW);
       break;
 
