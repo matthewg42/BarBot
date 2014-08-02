@@ -82,6 +82,7 @@ void setup()
   digitalWrite(36,HIGH);
 
   pinMode(38,OUTPUT); // Conveyor
+  pinMode(39,INPUT_PULLUP);
   digitalWrite(38,HIGH);
   
   pinMode(22,INPUT_PULLUP); // Dasher 0
@@ -184,6 +185,7 @@ void serialEvent()
      break;
 
     case 'F':
+    
     case 'f':
      colorWipe(strip0.Color(0,0,0),10); // off
      break;
@@ -191,36 +193,36 @@ void serialEvent()
 // Servo tests     
     case 'G':
     case 'g':
-      servoOptic0.write(0);
-      servoOptic1.write(0);
-      servoOptic2.write(0);
-      servoOptic3.write(0);
-      servoOptic4.write(0);
-      servoOptic5.write(0);
+      servoOptic0.write(10);
+      servoOptic1.write(10);
+      servoOptic2.write(10);
+      servoOptic3.write(10);
+      servoOptic4.write(10);
+      servoOptic5.write(10);
 
-      servoMixer0.write(0);
-      servoMixer1.write(0);
-      servoMixer2.write(0);
-      servoMixer3.write(0);
-      servoMixer4.write(0);
-      servoMixer5.write(0);
+      servoMixer0.write(10);
+      servoMixer1.write(10);
+      servoMixer2.write(10);
+      servoMixer3.write(10);
+      servoMixer4.write(10);
+      servoMixer5.write(10);
       break;
 
     case 'H':
     case 'h':
-      servoOptic0.write(180);
-      servoOptic1.write(180);
-      servoOptic2.write(180);
-      servoOptic3.write(180);
-      servoOptic4.write(180);
-      servoOptic5.write(180);
+      servoOptic0.write(170);
+      servoOptic1.write(170);
+      servoOptic2.write(170);
+      servoOptic3.write(170);
+      servoOptic4.write(170);
+      servoOptic5.write(170);
 
-      servoMixer0.write(180);
-      servoMixer1.write(180);
-      servoMixer2.write(180);
-      servoMixer3.write(180);
-      servoMixer4.write(180);
-      servoMixer5.write(180);
+      servoMixer0.write(170);
+      servoMixer1.write(170);
+      servoMixer2.write(170);
+      servoMixer3.write(170);
+      servoMixer4.write(170);
+      servoMixer5.write(170);
       break;
       
 // Big syringe H-bridge tests
@@ -232,7 +234,7 @@ void serialEvent()
       
     case 'J':
     case 'j':
-      analogWrite(5,100);
+      analogWrite(5,150);
       analogWrite(6,0);
       delay(500);
       analogWrite(5,0);
@@ -242,7 +244,7 @@ void serialEvent()
     case 'K':
     case 'k':
       analogWrite(5,0);
-      analogWrite(6,100);
+      analogWrite(6,150);
       delay(500);
       analogWrite(5,0);
       analogWrite(6,0);
@@ -273,11 +275,19 @@ void serialEvent()
       break;
 
 // Conveyor
-    case 'O':
-    case 'o':
+    case 'O':   // conveyor start
       digitalWrite(38,LOW);
       delay(10);
       digitalWrite(38,HIGH);
+      break;
+
+    case 'o':  // conveyor stop
+      digitalWrite(38,LOW);
+      break;
+
+    case 'S':  // conveyor sensor
+    case 's':
+      Serial.println(digitalRead(39));
       break;
 
 // Dasher 0
