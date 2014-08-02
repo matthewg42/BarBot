@@ -1,8 +1,8 @@
 #include "CStirrer.h"
 
 /* Stirrer dispenser
- * Note: Dispensing is regarded as complete as soon as a ~10ms pulse is sent. I.e. there
- * is an assumption that that a WAIT insturction of suitable length will follow
+ * Sends a ~10ms pulse to start the stirrer, then waits a preset amount of time for it to complete.
+ * There's no feedback, and it can't be stopped once started, which makes things easy here.
  */
 
 
@@ -13,6 +13,7 @@ CStirrer::CStirrer(uint8_t pin)
   digitalWrite(_pin, HIGH);
   _last_used = millis();
   _state = CStirrer::IDLE;
+  _pulse_sent = false;
 }
 
 CStirrer::~CStirrer()
@@ -34,6 +35,7 @@ bool CStirrer::dispense(uint8_t qty)
 
   _dispense_start = millis();
   digitalWrite(_pin, LOW);
+  _pulse_sent = false; // Well, it's been started...
 
   return true;
 };
@@ -43,10 +45,15 @@ bool CStirrer::loop()
   if (_state != CStirrer::BUSY)
     return true;
 
-  if (millis()-_dispense_start >= 10) // 10 ms pulse
+  if ((!_pulse_sent) && millis()-_dispense_start >= 10) // 10 ms pulse
   {
-    _state = CStirrer::IDLE;
      digitalWrite(_pin, HIGH);
+     _pulse_sent = true;
+  }
+  else if (millis()-_dispense_start > STIRRER_TIME)
+  {
+    // Done!
+    _state = CStirrer::IDLE;
   }
 
   return false;
@@ -54,7 +61,7 @@ bool CStirrer::loop()
 
 void CStirrer::stop()
 {
-
+  // the stirrer can't be stopped once started
   _state = CStirrer::IDLE;
 }
 

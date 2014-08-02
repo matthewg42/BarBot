@@ -60,11 +60,11 @@ BarBot::BarBot()
   
   // Stepper for platform movement
   _stepper = new AccelStepper(AccelStepper::DRIVER);
-  _stepper->setMaxSpeed(1000);
+  _stepper->setMaxSpeed(SPEED_NORMAL);
   _stepper->setAcceleration(1000);
   _stepper->setPinsInverted(false,false,false,false,true);
   _stepper->setEnablePin(4);
-  _stepper->disableOutputs();
+  //_stepper->disableOutputs();
   
   set_state(BarBot::IDLE);
   _current_instruction = 0;
@@ -162,7 +162,8 @@ bool BarBot::exec_instruction(uint16_t ins)
       break;
 
     case ZERO:
-      move_to(-2000);  // TODO: suitable value
+      _stepper->setMaxSpeed(SPEED_ZERO);
+      move_to(-500);  // TODO: suitable value
       _stepper->run();
       break;
   }
@@ -209,7 +210,7 @@ bool BarBot::loop()
       case MOVE:
         if (_stepper->distanceToGo() == 0)
         {
-          _stepper->disableOutputs();
+          //_stepper->disableOutputs();
           done = true;
         }
         if ((millis()-_move_start) > MAX_MOVE_TIME)
@@ -235,17 +236,20 @@ bool BarBot::loop()
           done = true;
           _stepper->stop();
           _stepper->setCurrentPosition(0);
-          _stepper->disableOutputs();
+          // _stepper->disableOutputs();
+          _stepper->setMaxSpeed(SPEED_NORMAL);
         } 
         else if (_stepper->distanceToGo() == 0)
         {
           debug("FAULT: distanceToGo=0 whilst zeroing!");
           set_state(BarBot::FAULT);
+          _stepper->setMaxSpeed(SPEED_NORMAL);
         }
         else if (millis()-_move_start > MAX_MOVE_TIME)
         {
           debug("FAULT: ZERO timeout");
           set_state(BarBot::FAULT);
+          _stepper->setMaxSpeed(SPEED_NORMAL);
         }
         break;
     }
@@ -274,7 +278,6 @@ void BarBot::set_state(barbot_state state)
 
     // Stop platform
     _stepper->stop();
-    _stepper->disableOutputs();
 
     // Stop all dispensers
     for (int ix=1; ix < DISPENSER_COUNT; ix++)

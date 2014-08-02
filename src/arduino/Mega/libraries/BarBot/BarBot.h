@@ -7,6 +7,7 @@
 #include "CDispenser.h"
 #include "COptic.h"
 #include "CStirrer.h"
+#include "CConveyor.h"
 
 #include "Arduino.h"
 #include "AccelStepper.h"
@@ -19,9 +20,10 @@
 #define MAX_RAIL_POSITION  7000  // Maximum number of steps
 
 // Harware setup
-#define DISPENSER_COUNT      21  // Number of attached dispensers. If altered, also need to change BarBot::BarBot()
-#define ZERO_SWITCH          52  // Zero/limit switch
-
+#define DISPENSER_COUNT      21   // Number of attached dispensers. If altered, also need to change BarBot::BarBot()
+#define ZERO_SWITCH          52   // Zero/limit switch
+#define SPEED_ZERO           400  // Speed when zeroing
+#define SPEED_NORMAL         1000 // Normal speed
 
 void debug(char *msg);
 

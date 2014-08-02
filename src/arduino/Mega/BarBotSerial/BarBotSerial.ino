@@ -12,7 +12,7 @@ void setup()
   Serial.println("Start!");
   bb = new BarBot();
   
-  bb->instruction_add(BarBot::ZERO, 0, 0);
+ // bb->instruction_add(BarBot::ZERO, 0, 0);
   bb->instruction_add(BarBot::MOVE, 20, 0);
   bb->instruction_add(BarBot::DISPENSE, 1, 1); 
   bb->instruction_add(BarBot::WAIT, 2000, 1);
