@@ -34,6 +34,10 @@ Servo servoMixer3;
 Servo servoMixer4; 
 Servo servoMixer5; 
 
+void colorWipe(uint32_t c, uint8_t wait);
+void rainbowCycle(uint8_t wait);
+uint32_t Wheel(byte WheelPos);
+
 void setup()
 {  
   stepper.setMaxSpeed(1000);
