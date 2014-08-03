@@ -8,6 +8,7 @@ COptic::COptic(uint8_t servo_pin)
   _servo.write(OPTIC_IDLE_POSITION);
   _last_used = millis();
   _state = COptic::IDLE;
+  _dispense_started = false;
 }
 
 COptic::~COptic()
@@ -26,11 +27,11 @@ bool COptic::dispense(uint8_t qty)
     return false;
   
   _state = COptic::BUSY;
-  _servo.write(OPTIC_DISPENSE_POSITION);
-  
-  _dispense_start = millis();
-  
-  return false;  
+  _dispense_started = false;
+
+
+
+  return false;
 };
 
 bool COptic::loop()
@@ -38,12 +39,26 @@ bool COptic::loop()
   if (_state != COptic::BUSY)
     return true;
   
-  if (millis()-_dispense_start >= OPTIC_DISPENSE_TIME)
+  if (!_dispense_started)
   {
-    _servo.write(OPTIC_IDLE_POSITION);
-    _state = COptic::IDLE;
+    // Ensure the optic has had time to refill since last use
+    if (millis()-_last_used > OPTIC_RECHARGE_TIME)
+    {
+      _dispense_start = millis();
+      _dispense_started = true;
+      _servo.write(OPTIC_DISPENSE_POSITION);
+    }
   }
-  
+  else
+  {
+    if (millis()-_dispense_start >= OPTIC_DISPENSE_TIME)
+    {
+      _servo.write(OPTIC_IDLE_POSITION);
+      _last_used = millis();
+      _state = COptic::IDLE;
+    }
+  }
+
   return true;
 }
 

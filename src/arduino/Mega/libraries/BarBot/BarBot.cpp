@@ -40,11 +40,11 @@ BarBot::BarBot()
         break;
         
       case 17:  // Conveyor
-        _dispeners[ix] = NULL;
+        _dispeners[ix] = new CConveyor(38, 39);
         break;
         
       case 18:  // Slice dispenser
-        _dispeners[ix] = NULL;
+        _dispeners[ix] = new CSlice(34);
         break;
         
       case 19:  // Stirrer
@@ -52,7 +52,7 @@ BarBot::BarBot()
         break;
         
       case 20:  // Umbrella
-        _dispeners[ix] = NULL;
+        _dispeners[ix] = new CUmbrella(32);
         break;
     }
 
@@ -61,7 +61,7 @@ BarBot::BarBot()
   // Stepper for platform movement
   _stepper = new AccelStepper(AccelStepper::DRIVER);
   _stepper->setMaxSpeed(SPEED_NORMAL);
-  _stepper->setAcceleration(1000);
+  _stepper->setAcceleration(MAX_ACCEL);
   _stepper->setPinsInverted(false,false,false,false,true);
   _stepper->setEnablePin(4);
   //_stepper->disableOutputs();
@@ -148,8 +148,7 @@ bool BarBot::exec_instruction(uint16_t ins)
       break;
 
     case MOVE:
-      // param1 is rail position to move to in mm
-      move_to((cmd->param1 * STEPS_PER_CM) / 10);
+      move_to((cmd->param1 * STEPS_PER_CM));
       _stepper->run();
       break;
 
@@ -177,6 +176,8 @@ bool BarBot::loop()
   instruction *cmd = &_instructions[_current_instruction];
   bool done = false;
   
+  _stepper->run();
+    
   for (int ix=1; ix < DISPENSER_COUNT; ix++)
     if (_dispeners[ix] != NULL)
     {
@@ -260,6 +261,7 @@ bool BarBot::loop()
       {
         // exec_instruction returns false when there are no more instructions to execute.
         debug("Done! setting state=idle");
+        _stepper->disableOutputs();
         set_state(BarBot::IDLE);
       }
     }
@@ -288,6 +290,7 @@ void BarBot::set_state(barbot_state state)
 
 void BarBot::move_to(long pos)
 {
+  char buf[30]="";
   if (pos > MAX_RAIL_POSITION)
   {
     pos = MAX_RAIL_POSITION;
@@ -297,6 +300,8 @@ void BarBot::move_to(long pos)
   _stepper_target = pos;
   _stepper->moveTo(pos);
   _move_start = millis();
+  sprintf(buf, "move=%d", pos);
+  debug(buf);
 }
    
 void debug(char *msg)

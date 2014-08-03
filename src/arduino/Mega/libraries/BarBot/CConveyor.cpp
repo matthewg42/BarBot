@@ -24,7 +24,7 @@ CConveyor::~CConveyor()
 
 uint8_t CConveyor::get_dispener_type()
 {
-  return DISPENSER_STIRRER;
+  return DISPENSER_CONVEYOR;
 }
 
 bool CConveyor::dispense(uint8_t qty)
@@ -62,6 +62,7 @@ bool CConveyor::loop()
   {
     _state = CConveyor::IDLE;
     digitalWrite(_pin_start_stop, LOW);
+    debug("Conveyor timeout");
   }
 
   return false;

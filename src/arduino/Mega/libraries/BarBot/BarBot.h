@@ -8,6 +8,8 @@
 #include "COptic.h"
 #include "CStirrer.h"
 #include "CConveyor.h"
+#include "CUmbrella.h"
+#include "CSlice.h"
 
 #include "Arduino.h"
 #include "AccelStepper.h"
@@ -15,15 +17,16 @@
 
 #define MAX_INSTRUCTIONS    100  // Maximum number of instructions that can be stored
 
-#define MAX_MOVE_TIME      5000  // Maximum amount of time moving the platform should take (in ms).
-#define STEPS_PER_CM         55  // Number of steps per CM (platform movement)
-#define MAX_RAIL_POSITION  7000  // Maximum number of steps
+#define MAX_MOVE_TIME      19000 // Maximum amount of time moving the platform should take (in ms).
+#define STEPS_PER_CM         48  // Number of steps per CM (platform movement)
+#define MAX_RAIL_POSITION  7010  // Maximum number of steps
 
 // Harware setup
 #define DISPENSER_COUNT      21   // Number of attached dispensers. If altered, also need to change BarBot::BarBot()
 #define ZERO_SWITCH          52   // Zero/limit switch
 #define SPEED_ZERO           400  // Speed when zeroing
-#define SPEED_NORMAL         1000 // Normal speed
+#define SPEED_NORMAL         800  // Normal speed
+#define MAX_ACCEL           1500
 
 void debug(char *msg);
 
