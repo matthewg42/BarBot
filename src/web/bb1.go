@@ -6,12 +6,13 @@ import (
   "html/template"
   "net/http"
   "database/sql"
+  _ "github.com/go-sql-driver/mysql"
   "time"
   "strings"
-  _ "github.com/mattn/go-sqlite3"
   "github.com/tarm/goserial"
   "io"
   "strconv"
+  "flag"
 )
 
 const ORDER_FMT = "%05d"
@@ -452,7 +453,8 @@ func orderDrinkHandler(w http.ResponseWriter, r *http.Request) {
 // getDBConnection opens and returns a database connection
 func getDBConnection() *sql.DB {
   // Open database
-  db, err := sql.Open("sqlite3", "db.sqlite3")
+  // [user[:password]@][net[(addr)]]/dbname[?param1=value1&paramN=valueN]
+  db, err := sql.Open("mysql", "barbot-user:password@tcp(10.0.2.2:3306)/barbot")
   if err != nil {
     // TODO
     panic(fmt.Sprintf("%#v", err))
@@ -461,10 +463,10 @@ func getDBConnection() *sql.DB {
 }
 
 // BBSerial goroutine manages serial communications with barbot
-func BBSerial(c chan int) {
+func BBSerial(c chan int, serialPort string) {
   
   // Open serial port
-  port := &serial.Config{Name: "/dev/ttyS0", Baud: 115200} // TODO: belongs in a config file or maybe database
+  port := &serial.Config{Name: serialPort, Baud: 115200} 
   s, err := serial.OpenPort(port)
   if err != nil {
     panic(fmt.Sprintf("BBSerial failed to open serial port: %v", err))
@@ -483,9 +485,8 @@ func BBSerial(c chan int) {
 func getCommandList(drink_order_id int) ([]string, int) {
 /*
  * Instructions generated:
- *   Mnnnnn               - move to rail position nnnnn
- *   Wnnnnn               - wait for nnnnn ms
- *   Dnn:xxxx             - Dispense using dispenser nn, with parameter xxxx
+ *   M nnnnn               - move to rail position nnnnn
+ *   D nn xxxx             - Dispense using dispenser nn, with parameter xxxx
  * 
  */
   
@@ -515,6 +516,9 @@ func getCommandList(drink_order_id int) ([]string, int) {
   
   commandList := make([]string, 1)
   
+  // Clear any previous instructions
+  commandList = append(commandList, fmt.Sprintf("C"))
+  
   for rows.Next() {
     var ingredient_id int
     var qty int
@@ -529,21 +533,20 @@ func getCommandList(drink_order_id int) ([]string, int) {
     }
 
     // move to the correct position
-    commandList = append(commandList, fmt.Sprintf("M%d", rail_position))
+    commandList = append(commandList, fmt.Sprintf("M %d", rail_position))
 
     // Dispense
     for qty > 0 {
       qty--
-      commandList = append(commandList, fmt.Sprintf("D%d:%d", dispenser_id, dispenser_param))
-
-      // Some dispenersers require a delay before moving onto the next dispenerser, others dont's. The ones that do require a 
-      // delay need it because the arduino doesn't know when the operation has finished (no feedback yet).
-      switch dispenser_type {
-        case DISPENSER_DASHER, DISPENSER_CONVEYOR, DISPENSER_STIRRER, DISPENSER_SLICE, DISPENSER_UMBRELLA:
-          commandList = append(commandList, fmt.Sprintf("W%d", dispenser_param))
-      }
+      commandList = append(commandList, fmt.Sprintf("D% d %d", dispenser_id, dispenser_param))
     }
   }
+  
+  // move to home position when done
+  commandList = append(commandList, fmt.Sprintf("M 0"))
+  
+  // Go!
+  commandList = append(commandList, fmt.Sprintf("G"))
 
   return commandList, 0
 }
@@ -592,6 +595,7 @@ func SendDrink(drink_order_id int, s io.ReadWriteCloser) {
   for _, cmd := range cmdList {
     fmt.Printf("> %s\n", cmd)
     _, err := s.Write([]byte(fmt.Sprintf("%s\n", cmd)))
+    time.Sleep(10 * time.Millisecond) // 10ms delay between each instruction; don't send commands faster than the Arduino can process them
     if err != nil {
       panic(fmt.Sprintf("SendDrink failed to transmit instruction: %v", err))
     }
@@ -599,7 +603,11 @@ func SendDrink(drink_order_id int, s io.ReadWriteCloser) {
 
 }
 
-func main() { 
+func main() {
+  
+  var serialPort = flag.String("serial", "/dev/ttyS0", "Serial port to use")
+  flag.Parse()
+  
   http.HandleFunc("/menu/", drinksMenuHandler)
   http.HandleFunc("/order/", orderDrinkHandler)
   http.HandleFunc("/orderlist/", orderListHandler) // TODO: password protect (e.g. using go-http-auth)
@@ -608,7 +616,7 @@ func main() {
   http.Handle("/", http.FileServer(http.Dir("static")))
   
   MakeDrinkChan = make(chan int);
-  go BBSerial(MakeDrinkChan)
+  go BBSerial(MakeDrinkChan, *serialPort)
 
   http.ListenAndServe(":8080", nil)
 }
