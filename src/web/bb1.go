@@ -6,7 +6,7 @@ import (
   "html/template"
   "net/http"
   "database/sql"
-  _ "github.com/go-sql-driver/mysql"
+  _ "github.com/mattn/go-sqlite3"
   "time"
   "strings"
   "github.com/tarm/goserial"
@@ -453,8 +453,7 @@ func orderDrinkHandler(w http.ResponseWriter, r *http.Request) {
 // getDBConnection opens and returns a database connection
 func getDBConnection() *sql.DB {
   // Open database
-  // [user[:password]@][net[(addr)]]/dbname[?param1=value1&paramN=valueN]
-  db, err := sql.Open("mysql", "barbot-user:password@tcp(10.0.2.2:3306)/barbot")
+  db, err := sql.Open("sqlite3", "db.sqlite3")
   if err != nil {
     // TODO
     panic(fmt.Sprintf("%#v", err))
