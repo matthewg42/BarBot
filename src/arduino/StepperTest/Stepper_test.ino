@@ -105,7 +105,7 @@ void loop()
 {
   if (stepper.distanceToGo() == 0)
   {
-    stepper.disableOutputs();
+  //  stepper.disableOutputs();
     digitalWrite(13,LOW);
   }
   
@@ -152,6 +152,14 @@ void serialEvent()
 
     case '6':
       stepper.moveTo(3000);
+      break;
+
+    case '7':
+      stepper.moveTo(6000);
+      break;
+
+    case '8':
+      stepper.moveTo(6800);
       break;
 
     case '9':
@@ -210,19 +218,19 @@ void serialEvent()
 
     case 'H':
     case 'h':
-      servoOptic0.write(170);
-      servoOptic1.write(170);
-      servoOptic2.write(170);
-      servoOptic3.write(170);
-      servoOptic4.write(170);
-      servoOptic5.write(170);
+      servoOptic0.write(70);
+      servoOptic1.write(70);
+      servoOptic2.write(70);
+      servoOptic3.write(70);
+      servoOptic4.write(70);
+      servoOptic5.write(70);
 
-      servoMixer0.write(170);
-      servoMixer1.write(170);
-      servoMixer2.write(170);
-      servoMixer3.write(170);
-      servoMixer4.write(170);
-      servoMixer5.write(170);
+      servoMixer0.write(70);
+      servoMixer1.write(70);
+      servoMixer2.write(70);
+      servoMixer3.write(70);
+      servoMixer4.write(70);
+      servoMixer5.write(70);
       break;
       
 // Big syringe H-bridge tests
