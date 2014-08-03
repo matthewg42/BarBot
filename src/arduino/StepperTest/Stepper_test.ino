@@ -97,6 +97,9 @@ void setup()
   pinMode(27,OUTPUT); 
   digitalWrite(27,LOW);
 
+  pinMode(52,INPUT_PULLUP);  // zero switch
+  pinMode(53,INPUT_PULLUP);  // emergency stop switch
+  
   Serial.begin(9600);
 }
 
@@ -105,7 +108,7 @@ void loop()
 {
   if (stepper.distanceToGo() == 0)
   {
-  //  stepper.disableOutputs();
+    stepper.disableOutputs();
     digitalWrite(13,LOW);
   }
   
@@ -151,11 +154,11 @@ void serialEvent()
       break;
 
     case '6':
-      stepper.moveTo(3000);
+      stepper.moveTo(5000);
       break;
 
     case '7':
-      stepper.moveTo(6000);
+      stepper.moveTo(6500);
       break;
 
     case '8':
@@ -329,6 +332,16 @@ void serialEvent()
       while(!digitalRead(26));
       while(digitalRead(26));
       digitalWrite(27,LOW);
+      break;
+
+    case 'T':  // zero switch
+    case 't':
+      Serial.println(digitalRead(52));
+      break;
+
+    case 'U':  // emergency stop
+    case 'u':
+      Serial.println(digitalRead(53));
       break;
 
     default:
