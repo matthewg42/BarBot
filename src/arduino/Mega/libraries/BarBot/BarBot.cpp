@@ -115,10 +115,16 @@ bool BarBot::instructions_clear()
 bool BarBot::go()
 {  
   if (_state != BarBot::IDLE)
+  {
+    debug("go failed: not idle");
     return false;
+  }
   
   if (_instruction_count <= 0)
+  {
+    debug("go failed: no instructions");
     return false;
+  }
   
   _current_instruction = 0;
   
@@ -153,7 +159,8 @@ bool BarBot::exec_instruction(uint16_t ins)
       break;
 
     case DISPENSE:
-     _dispeners[cmd->param1]->dispense(cmd->param2); // nb. instruction_add validated that param1 was in bounds.
+      if (_dispeners[cmd->param1] != NULL)
+        _dispeners[cmd->param1]->dispense(cmd->param2); // nb. instruction_add validated that param1 was in bounds.
      break;
 
     case WAIT:
@@ -222,7 +229,11 @@ bool BarBot::loop()
         break;
         
       case DISPENSE:
-        if (_dispeners[cmd->param1]->get_status() == CDispenser::IDLE)
+        if (_dispeners[cmd->param1] != NULL)
+        {
+          if (_dispeners[cmd->param1]->get_status() == CDispenser::IDLE)
+            done = true;
+        } else
           done = true;
         break;
         
@@ -302,6 +313,11 @@ void BarBot::move_to(long pos)
   _move_start = millis();
   sprintf(buf, "move=%d", pos);
   debug(buf);
+}
+
+BarBot::barbot_state BarBot::get_state()
+{
+  return _state;
 }
    
 void debug(char *msg)

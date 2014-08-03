@@ -56,9 +56,11 @@ class BarBot
     bool instructions_clear();
     bool go();
     bool loop();
+    barbot_state get_state();
+    
     
 
-    
+      
   private:
     struct instruction
     {
