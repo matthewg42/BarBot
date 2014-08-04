@@ -10,6 +10,8 @@
 #include "CConveyor.h"
 #include "CUmbrella.h"
 #include "CSlice.h"
+#include "CMixer.h"
+#include "CDasher.h"
 
 #include "Arduino.h"
 #include "AccelStepper.h"
@@ -24,6 +26,7 @@
 // Harware setup
 #define DISPENSER_COUNT      21   // Number of attached dispensers. If altered, also need to change BarBot::BarBot()
 #define ZERO_SWITCH          52   // Zero/limit switch
+#define ESTOP_PIN            53   // Emergency stop 
 #define SPEED_ZERO           400  // Speed when zeroing
 #define SPEED_NORMAL         800  // Normal speed
 #define MAX_ACCEL           1500
@@ -55,6 +58,7 @@ class BarBot
     bool instruction_add(instruction_type instruction, uint16_t param1, uint16_t param2);
     bool instructions_clear();
     bool go();
+    bool reset();
     bool loop();
     barbot_state get_state();
     

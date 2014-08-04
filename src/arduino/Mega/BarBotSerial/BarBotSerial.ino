@@ -105,6 +105,15 @@ void process_message(char *msg)
     case 'G': // GO!
       bb->go();
       break;
+      
+    case 'R':  // Reset. Clear all instructions, return to home, set IDLE state
+      bb->reset();
+      break;
+      
+    case 'Z':  // Zero
+      bb->instructions_clear();
+      bb->instruction_add(BarBot::ZERO, 0, 0);  
+      bb->go();
      
     default:
       Serial.println("Unexpected instruction!");
