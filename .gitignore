@@ -1,3 +1,3 @@
 *~
 *.blend[0-9]
-src/arduino/*/build-mega2560
+src/arduino/**/build-mega2560

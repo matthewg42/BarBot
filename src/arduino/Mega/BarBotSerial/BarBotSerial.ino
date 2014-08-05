@@ -5,6 +5,9 @@
 
 #define SERIAL_IN_BUF 50
 
+void process_serial(void);
+void process_message(char *msg);
+
 BarBot *bb;
 
 void setup()
@@ -23,7 +26,7 @@ void loop()
 }
 
 
-void process_serial() 
+void process_serial(void) 
 {
   static char inputString[SERIAL_IN_BUF];
   static uint8_t bytes_received;
