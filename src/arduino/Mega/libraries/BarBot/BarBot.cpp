@@ -10,52 +10,34 @@ BarBot::BarBot()
   {
     switch(ix)
     {
-      case 1: _dispeners[ix] = new COptic(40); break; // Optic0
-      case 2: _dispeners[ix] = new COptic(42); break; // Optic1
-      case 3: _dispeners[ix] = new COptic(44); break; // Optic2
-      case 4: _dispeners[ix] = new COptic(46); break; // Optic3
-      case 5: _dispeners[ix] = new COptic(48); break; // Optic4
-      case 6: _dispeners[ix] = new COptic(50); break; // Optic5
+      case 1:  _dispeners[ix] = new COptic(40); break; // Optic0
+      case 2:  _dispeners[ix] = new COptic(42); break; // Optic1
+      case 3:  _dispeners[ix] = new COptic(44); break; // Optic2
+      case 4:  _dispeners[ix] = new COptic(46); break; // Optic3
+      case 5:  _dispeners[ix] = new COptic(48); break; // Optic4
+      case 6:  _dispeners[ix] = new COptic(50); break; // Optic5
 
-      case 7:   // Preasure0
-      case 8:   // Preasure1
-      case 9:   // Preasure2 
-      case 10:  // Preasure3
-      case 11:  // Preasure4
-      case 12:  // Preasure5
-        // TODO: preasure type
-        //dispeners[ix] = new CPreasure();
-        _dispeners[ix] = NULL;
-        break;
+      case 7:  _dispeners[ix] = new CMixer(41); break; // Preasure0
+      case 8:  _dispeners[ix] = new CMixer(43); break; // Preasure1
+      case 9:  _dispeners[ix] = new CMixer(45); break; // Preasure2 
+      case 10: _dispeners[ix] = new CMixer(47); break; // Preasure3
+      case 11: _dispeners[ix] = new CMixer(49); break; // Preasure4
+      case 12: _dispeners[ix] = new CMixer(51); break; // Preasure5
         
-      case 13:  // Dasher0
-      case 14:  // Dasher1
-      case 15:  // Dasher2
-        // TODO
-        _dispeners[ix] = NULL;
-        break;
+      case 13:  _dispeners[ix] = new CDasher(22, 23);  break; // Dasher0
+      case 14:  _dispeners[ix] = new CDasher(24, 25);  break; // Dasher1
+      case 15:  _dispeners[ix] = new CDasher(26, 27);  break; // Dasher2
         
-      case 16:  // Syringe
-        _dispeners[ix] = NULL;
-        break;
+      case 16: /* TODO */   _dispeners[ix] = NULL;     break;  // Syringe
         
-      case 17:  // Conveyor
-        _dispeners[ix] = new CConveyor(38, 39);
-        break;
+      case 17: _dispeners[ix] = new CConveyor(38, 39); break;  // Conveyor
         
-      case 18:  // Slice dispenser
-        _dispeners[ix] = new CSlice(34);
-        break;
+      case 18: _dispeners[ix] = new CSlice(34);        break;  // Slice dispenser
         
-      case 19:  // Stirrer
-        _dispeners[ix] = new CStirrer(36);
-        break;
+      case 19: _dispeners[ix] = new CStirrer(36);      break;  // Stirrer
         
-      case 20:  // Umbrella
-        _dispeners[ix] = new CUmbrella(32);
-        break;
+      case 20: _dispeners[ix] = new CUmbrella(32);     break;  // Umbrella
     }
-
   }
   
   // Stepper for platform movement
@@ -71,6 +53,7 @@ BarBot::BarBot()
   _stepper_target = 0;
   
   pinMode(ZERO_SWITCH, INPUT_PULLUP);
+  pinMode(ESTOP_PIN  , INPUT_PULLUP);
 }
 
 BarBot::~BarBot()
@@ -84,6 +67,12 @@ BarBot::~BarBot()
 // Returns: true if instruction added, false otherwise
 bool BarBot::instruction_add(instruction_type instruction, uint16_t param1, uint16_t param2)
 {
+  if (_state == BarBot::RUNNING)
+  {
+    debug("Error: barbot running, can't add");
+    return false;
+  } 
+
   // For DISPENSE instructions, param1 is the dispenser_id - ensure this is valid.
   if ((instruction == BarBot::DISPENSE) && (param1 >= DISPENSER_COUNT))
     return false;    
@@ -105,9 +94,20 @@ bool BarBot::instruction_add(instruction_type instruction, uint16_t param1, uint
 // Clear the insturction list
 bool BarBot::instructions_clear()
 {
-  memset(_instructions, NOP, sizeof(_instructions));  
-  _instruction_count = 0;
-  return true;
+  if (_state != BarBot::RUNNING)
+  {
+    memset(_instructions, NOP, sizeof(_instructions));  
+    _instruction_count = 0;
+    return true;
+  }
+}
+
+bool BarBot::reset()
+{
+  set_state(BarBot::FAULT); // Ensure stopped
+  instructions_clear();
+  move_to(0);
+  set_state(BarBot::IDLE);
 }
 
 // Make the drink!
@@ -136,6 +136,7 @@ bool BarBot::go()
   
   return true;
 }
+
 
 bool BarBot::exec_instruction(uint16_t ins)
 {
@@ -205,6 +206,15 @@ bool BarBot::loop()
     debug("Error: limit switch unexpectedly hit!");
     set_state(BarBot::FAULT);
   }
+  
+  _stepper->run();
+  
+  // Look for Emergency stop button being pressed
+  if ((_state != BarBot::FAULT) && (digitalRead(ESTOP_PIN) == HIGH))
+  {
+    debug("ESTOP");
+    set_state(BarBot::FAULT);
+  }
 
   // If running, find out if the last executed insturction has finished 
   if (_state == BarBot::RUNNING)
@@ -265,7 +275,9 @@ bool BarBot::loop()
         }
         break;
     }
-
+  
+    _stepper->run();
+  
     if (done)
     {
       if (!exec_instruction(++_current_instruction))
@@ -281,11 +293,9 @@ bool BarBot::loop()
   return false;
 }
 
-void BarBot::set_state(barbot_state state)
-{
-  _state = state;
-  
-  if (_state == BarBot::FAULT)
+void BarBot::set_state(barbot_state new_state)
+{  
+  if (new_state == BarBot::FAULT)
   {
     debug("FAULT.");
 
@@ -297,6 +307,20 @@ void BarBot::set_state(barbot_state state)
       if (_dispeners[ix] != NULL)
         _dispeners[ix]->stop();
   }
+  
+  // Don't allow leaving FAULT state if emergency stop pressed
+  if 
+  (
+    (_state == BarBot::FAULT)    && 
+    (new_state != BarBot::FAULT) &&
+    (digitalRead(ESTOP_PIN) == HIGH)
+  )
+  {
+    debug("ESTOP ACTIVE");
+    return;
+  }   
+  
+  _state = new_state;  
 }
 
 void BarBot::move_to(long pos)
