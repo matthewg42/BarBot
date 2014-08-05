@@ -1,18 +1,19 @@
-#ifndef CSTIRRER_H
-#define CSTIRRER_H
+#ifndef CUMBRELLA_H
+#define CUMBRELLA_H
 
 #include "CDispenser.h"
 
-#define STIRRER_TIME 5000 // Time the stirrer takes in ms
+#define UMBRELLA_PULSE_LEN 500  // Time to activate the solenoid for
+#define UMBRELLA_WAIT      1000 // How long to wait after dropping before being "done"
 
 #include "Arduino.h"
 #include <avr/pgmspace.h>
 
-class CStirrer : public CDispenser
+class CUmbrella : public CDispenser
 {
   public:
-     CStirrer(uint8_t servo_pin);
-     ~CStirrer();
+     CUmbrella(uint8_t pin);
+     ~CUmbrella();
      uint8_t          get_dispener_type();
      bool             dispense(uint8_t qty);
      bool             loop();

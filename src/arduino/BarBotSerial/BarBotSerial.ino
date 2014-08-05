@@ -5,8 +5,8 @@
 
 #define SERIAL_IN_BUF 50
 
-void process_serial(void);
 void process_message(char *msg);
+void process_serial();
 
 BarBot *bb;
 
