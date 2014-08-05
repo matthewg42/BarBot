@@ -66,6 +66,23 @@ type DispenserDetails struct {
   Ingredients []DispenserIngredients
 }
 
+type AdminRecipeIngr struct {
+  Id    int
+  Name  string
+  qty   int
+  UoM   string
+}
+
+type AdminRecipe struct {
+  RecipieName     string
+  RecipieId       int
+  Recipes         []Recipe
+  AllIngredients  []AdminRecipeIngr  // All known ingrediants for "Add" listbox
+  RecIngredients  []AdminRecipeIngr  // Ingrediants in currently selected receipe
+}
+
+
+
 const (
   DISPENSER_OPTIC    = 1
   DISPENSER_MIXER    = 2 
@@ -81,11 +98,21 @@ const (
 var MakeDrinkChan chan int
 
 // showMenu displays the list of available drinks to the user
-// TODO: limit display to only those drinks that can currently be made
 func showMenu(db *sql.DB, w http.ResponseWriter) {
 
-      // Load drinks
-      rows, err := db.Query("select id, name from recipe")
+      // Load drinks - only show those that can currently be made
+      rows, err := db.Query(
+         `select r.id, r.name 
+          from recipe r
+          where not exists 
+          (
+            select null
+            from recipe r2
+            inner join recipe_ingredient ri on r2.id = ri.recipe_id
+            left outer join dispenser d on cast(d.ingredient_id as integer) = cast(ri.ingredient_id as integer)
+            where d.id is null
+            and r2.id = r.id
+          )`)
       if err != nil {
         // TODO
         panic(fmt.Sprintf("%v", err))
@@ -178,12 +205,109 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
     case strings.HasPrefix(req_page, "dispenser/"):
       adminDispenser(w, r, req_page[len("dispenser/"):])
       return;
-      
+
+    case strings.HasPrefix(req_page, "recipe/"):
+      adminRecipe(w, r, req_page[len("recipe/"):])
+      return;
+
     default:
       http.NotFound(w, r)
       return
   }
 }
+
+
+// adminRecipe allows a recipe to be added / amended
+func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
+
+  tmpl, _ := template.ParseFiles("admin_header.html", "admin_recipe.html", "admin_footer.html")
+
+  // Open database
+  db := getDBConnection()
+  defer db.Close()
+
+  if (param == "add_drink") {
+    // returned form is receipe_name=<drink name entered>
+    r.ParseForm()
+
+    _, err := db.Exec("insert into recipe (name) values (?)", r.Form.Get("new_drink_name"))
+    if err != nil {
+      panic(fmt.Sprintf("Failed to update db: %v", err))
+    }
+    
+    http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+    return
+  }
+  
+  var adminR AdminRecipe
+  
+  // Get a list of all drinks for list box
+  rows, err := db.Query("select r.id, r.name  from recipe r order by r.name")
+  if err != nil {
+    panic(fmt.Sprintf("%v", err))
+  }
+  defer rows.Close()
+
+  for rows.Next() {
+    var recipe Recipe
+    rows.Scan(&recipe.Id, &recipe.Name)
+    adminR.Recipes = append(adminR.Recipes, recipe)
+  }
+  rows.Close()
+ 
+  // Get a list of all ingrediants for the "add" list box
+  rows, err = db.Query("select i.id, i.name from ingredient i order by i.name")
+  if err != nil {
+    panic(fmt.Sprintf("%v", err))
+  }
+  defer rows.Close()
+
+  for rows.Next() {
+    var recipeIngr AdminRecipeIngr
+    rows.Scan(&recipeIngr.Id, &recipeIngr.Name)
+    adminR.AllIngredients = append(adminR.AllIngredients, recipeIngr)
+  }
+  rows.Close()
+  
+  // Get a list of all ingrediants in the currently selected drink
+  recipe_id, err := strconv.Atoi(r.Form.Get("new_drink_name"))
+  if err != nil {
+    recipe_id = -1  
+  } 
+  
+  sqlstr :=  
+    `   select
+          i.id,  
+          i.name,
+          ri.qty,
+          case when ri.qty = 1 then dt.unit_name else dt.unit_plural end as uom
+        from recipe_ingredient ri
+        inner join ingredient i on ri.ingredient_id = i.id
+        inner join dispenser_type dt on dt.id = i.dispenser_type_id
+        where ri.recipe_id = ?
+        order by ri.seq`
+        
+  rows, err = db.Query(sqlstr, recipe_id)
+  if err != nil {
+    panic(fmt.Sprintf("%v", err))
+  }
+  defer rows.Close()
+
+  for rows.Next() {
+    var recipeIngr AdminRecipeIngr
+    rows.Scan(&recipeIngr.Id, &recipeIngr.Name)
+    adminR.RecIngredients = append(adminR.RecIngredients, recipeIngr)
+  }
+  rows.Close()
+   
+
+  
+  tmpl.ExecuteTemplate(w, "admin_header", nil)
+  tmpl.ExecuteTemplate(w, "admin_recipe", adminR)
+  tmpl.ExecuteTemplate(w, "admin_footer", nil)
+  return
+}
+
  
 // adminDispenser shows the despenser selection page of the admin interface
 func adminDispenser(w http.ResponseWriter, r *http.Request, param string) {
