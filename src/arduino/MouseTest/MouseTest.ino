@@ -151,7 +151,11 @@ void handleCmd(void) {
         break;
     case 'G':
         // Goto (id)
-        id = atoi(cmdbuf+1);
+        if (cmdbuf[1] == 'C') id = 15;
+        else if (cmdbuf[1] == 'L') id = 16;
+        else if (cmdbuf[1] == 'S') id = 17;
+        else if (cmdbuf[1] == 'U') id = 18;
+        else id = atoi(cmdbuf+1);
         Serial.print("Go ");
         Serial.println(id);
         gotoDispenser(id);
@@ -220,6 +224,21 @@ void handleCmd(void) {
         else if (cmdbuf[1] == 'R') {
             digitalWrite(CONVEYOR_PIN, LOW);
         }
+        break;
+    case 'L':
+        digitalWrite(LEMON_PIN, LOW);
+        delay(10);
+        digitalWrite(LEMON_PIN, HIGH);
+        break;
+    case 'S':
+        digitalWrite(STIRRER_PIN, LOW);
+        delay(10);
+        digitalWrite(STIRRER_PIN, HIGH);
+        break;
+    case 'U':
+        digitalWrite(UMBRELLA_PIN, HIGH);
+        delay(1000);
+        digitalWrite(UMBRELLA_PIN, LOW);
         break;
     default:
         bad = true;
@@ -294,6 +313,10 @@ void opticFlourish(void) {
 }
 
 void printHelp(void) {
+    Serial.println("0000000000111111111");
+    Serial.println("0123456789012345678");
+    Serial.println("OOOOOOMMMMMMDDDCLSU");
+    Serial.println("012345012345012CLSU");
     Serial.println("Gn  : goto dispenser n");
     Serial.println("ODn : dispense optic n");
     Serial.println("OOn : optic open n");
@@ -307,4 +330,8 @@ void printHelp(void) {
     Serial.println("CD  : conveyor dispense");
     Serial.println("CR  : conveyor reset (stop)");
     Serial.println("CS  : conveyor sensor");
+    Serial.println("L   : lemon");
+    Serial.println("S   : stirrer");
+    Serial.println("U   : umbrella");
+    Serial.println("?   : help");
 }
