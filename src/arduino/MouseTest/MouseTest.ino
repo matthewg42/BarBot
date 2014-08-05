@@ -22,7 +22,7 @@ void printHelp(void);
 #define PLATFORM_ACCEL      3000
 
 #define OPTIC_DELAY         3000
-#define MIXER_DELAY         2000
+#define MIXER_DELAY         3500
 
 #define ZERO_SWITCH_PIN     52
 #define EMERGENCY_STOP_PIN  53
@@ -208,6 +208,19 @@ void handleCmd(void) {
             bad = true; 
         }
         break;
+    case 'C':
+        if (cmdbuf[1] == 'D') {
+            digitalWrite(CONVEYOR_PIN, LOW);
+            delay(10);
+            digitalWrite(CONVEYOR_PIN, HIGH);
+        }
+        else if (cmdbuf[1] == 'S') {
+            Serial.println(digitalRead(CONVEYOR_SENSOR_PIN));
+        }
+        else if (cmdbuf[1] == 'R') {
+            digitalWrite(CONVEYOR_PIN, LOW);
+        }
+        break;
     default:
         bad = true;
         break;
@@ -291,4 +304,7 @@ void printHelp(void) {
     Serial.println("MOn : open mix n");
     Serial.println("MCn : close mix n");
     Serial.println("MF  : mixer flourish (warning opens all!)");
+    Serial.println("CD  : conveyor dispense");
+    Serial.println("CR  : conveyor reset (stop)");
+    Serial.println("CS  : conveyor sensor");
 }
