@@ -22,7 +22,7 @@ void printHelp(void);
 #define PLATFORM_ACCEL      3000
 
 #define OPTIC_DELAY         3000
-#define MIXER_DELAY         3500
+#define MIXER_DELAY         2000
 
 #define ZERO_SWITCH_PIN     52
 #define EMERGENCY_STOP_PIN  53
