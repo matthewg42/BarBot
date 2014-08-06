@@ -2,13 +2,15 @@
 
 
 
-COptic::COptic(uint8_t servo_pin)
+COptic::COptic(uint8_t servo_pin, uint8_t open_pos, uint8_t closed_pos)
 {
   _servo.attach(servo_pin);
-  _servo.write(OPTIC_IDLE_POSITION);
+  _servo.write(_closed_pos);
   _last_used = millis();
   _state = COptic::IDLE;
   _dispense_started = false;
+  _closed_pos = closed_pos;
+  _open_pos = open_pos;
 }
 
 COptic::~COptic()
@@ -46,14 +48,14 @@ bool COptic::loop()
     {
       _dispense_start = millis();
       _dispense_started = true;
-      _servo.write(OPTIC_DISPENSE_POSITION);
+      _servo.write(_open_pos);
     }
   }
   else
   {
     if (millis()-_dispense_start >= OPTIC_DISPENSE_TIME)
     {
-      _servo.write(OPTIC_IDLE_POSITION);
+      _servo.write(_closed_pos);
       _last_used = millis();
       _state = COptic::IDLE;
     }
@@ -64,7 +66,7 @@ bool COptic::loop()
 
 void COptic::stop()
 {
-  _servo.write(OPTIC_IDLE_POSITION);
+  _servo.write(_closed_pos);
   _state = COptic::IDLE; 
 }
 

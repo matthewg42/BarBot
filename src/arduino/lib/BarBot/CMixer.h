@@ -1,8 +1,8 @@
 #ifndef CMIXER_H
 #define CMIXER_H
 
-#define MIXER_IDLE_POSITION       90
-#define MIXER_DISPENSE_POSITION    0
+#define MIXER_IDLE_POSITION       140
+#define MIXER_DISPENSE_POSITION    65
 
 
 #include "CMixer.h"

@@ -28,8 +28,8 @@
 #define ZERO_SWITCH          52   // Zero/limit switch
 #define ESTOP_PIN            53   // Emergency stop 
 #define SPEED_ZERO           400  // Speed when zeroing
-#define SPEED_NORMAL         800  // Normal speed
-#define MAX_ACCEL           1500
+#define SPEED_NORMAL        1500  // Normal speed
+#define MAX_ACCEL           3000
 
 void debug(char *msg);
 

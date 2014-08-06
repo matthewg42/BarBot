@@ -10,12 +10,12 @@ BarBot::BarBot()
   {
     switch(ix)
     {
-      case 1:  _dispeners[ix] = new COptic(40); break; // Optic0
-      case 2:  _dispeners[ix] = new COptic(42); break; // Optic1
-      case 3:  _dispeners[ix] = new COptic(44); break; // Optic2
-      case 4:  _dispeners[ix] = new COptic(46); break; // Optic3
-      case 5:  _dispeners[ix] = new COptic(48); break; // Optic4
-      case 6:  _dispeners[ix] = new COptic(50); break; // Optic5
+      case 1:  _dispeners[ix] = new COptic(40, 65, 10); break; // Optic0
+      case 2:  _dispeners[ix] = new COptic(42, 65, 10); break; // Optic1
+      case 3:  _dispeners[ix] = new COptic(44, 65, 10); break; // Optic2
+      case 4:  _dispeners[ix] = new COptic(46, 10, 65); break; // Optic3
+      case 5:  _dispeners[ix] = new COptic(48, 65, 10); break; // Optic4
+      case 6:  _dispeners[ix] = new COptic(50, 65, 10); break; // Optic5
 
       case 7:  _dispeners[ix] = new CMixer(41); break; // Preasure0
       case 8:  _dispeners[ix] = new CMixer(43); break; // Preasure1
@@ -155,7 +155,7 @@ bool BarBot::exec_instruction(uint16_t ins)
       break;
 
     case MOVE:
-      move_to((cmd->param1 * STEPS_PER_CM));
+      move_to(cmd->param1);
       _stepper->run();
       break;
 
