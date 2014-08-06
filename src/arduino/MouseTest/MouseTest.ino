@@ -22,7 +22,7 @@ void printHelp(void);
 #define PLATFORM_ACCEL      3000
 
 #define OPTIC_DELAY         3000
-#define MIXER_DELAY         2000
+#define MIXER_DELAY         1800
 
 #define ZERO_SWITCH_PIN     52
 #define EMERGENCY_STOP_PIN  53
@@ -34,7 +34,7 @@ void printHelp(void);
 
 #define LAST_DISPENSER_ID   18
 
-int dispenserPositions[] = { 0, 546, 1093, 1640, 2187, 2734, 3117, 3417, 3746, 4057, 4375, 4714, 5058, 5332, 5605, 6042, 6485, 6792, 7000 };
+int dispenserPositions[] = { 0, 546, 1093, 1640, 2187, 2734, 3117, 3417, 3746, 4057, 4375, 4714, 5058, 5332, 5605, 5900, 6335, 6792, 7000 };
 
 Servo servoOptic[6];
 uint8_t opticServoPin[]        = { 40, 42, 44, 46, 48, 50 };
@@ -79,14 +79,14 @@ void setup()
     digitalWrite(UMBRELLA_PIN,LOW);
 
     pinMode(LEMON_PIN,OUTPUT);
-    digitalWrite(LEMON_PIN,HIGH);
+    digitalWrite(LEMON_PIN,LOW);
 
     pinMode(STIRRER_PIN,OUTPUT);
-    digitalWrite(STIRRER_PIN,HIGH);
+    digitalWrite(STIRRER_PIN,LOW);
 
     pinMode(CONVEYOR_PIN,OUTPUT); // Conveyor
     pinMode(CONVEYOR_SENSOR_PIN,INPUT_PULLUP);
-    digitalWrite(CONVEYOR_PIN,HIGH);
+    digitalWrite(CONVEYOR_PIN,LOW);
 
     pinMode(ZERO_SWITCH_PIN,INPUT_PULLUP);  // zero switch
     pinMode(EMERGENCY_STOP_PIN,INPUT_PULLUP);  // emergency stop switch
