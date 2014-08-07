@@ -621,7 +621,8 @@ func getCommandList(drink_order_id int) ([]string, int) {
                 i.id,
                 ri.qty,
                 i.dispenser_param,
-                dt.id
+                dt.id,
+                dt.unit_size
               from drink_order do
               inner join recipe r on r.id = do.recipe_id
               inner join recipe_ingredient ri on ri.recipe_id = r.id
@@ -647,8 +648,9 @@ func getCommandList(drink_order_id int) ([]string, int) {
     var qty int
     var dispenser_param int
     var dispenser_type int
+    var unit_size int
       
-    rows.Scan(&ingredient_id, &qty, &dispenser_param, &dispenser_type)
+    rows.Scan(&ingredient_id, &qty, &dispenser_param, &dispenser_type, &unit_size)
     
     rail_position, dispenser_id := getIngredientPosition(ingredient_id)
     if dispenser_id == -1 {
@@ -661,7 +663,11 @@ func getCommandList(drink_order_id int) ([]string, int) {
     // Dispense
     for qty > 0 {
       qty--
-      commandList = append(commandList, fmt.Sprintf("D% d %d", dispenser_id, dispenser_param))
+      if dispenser_type == DISPENSER_MIXER {
+        commandList = append(commandList, fmt.Sprintf("D% d %d", dispenser_id, unit_size))
+      } else {
+        commandList = append(commandList, fmt.Sprintf("D% d %d", dispenser_id, dispenser_param))
+      }
     }
   }
   
