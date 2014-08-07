@@ -1,4 +1,61 @@
 {{define "admin_recipe"}}
-      
 
+      <form role="form" action="/admin/recipe/select_drink" class="navbar-form navbar-left" method="post">
+        <div class="form-group">
+          <label for="recipe_selection" class="col-sm-3 control-label">Recipe name</label>
+            <select name="recipe_selection" class="form-control" id="recipe_selection">
+            {{range .Recipes}}
+              {{if .Selected}}
+                <option value="{{.Id}}" selected>{{.Name}}</option>
+              {{else}}
+                <option value="{{.Id}}">{{.Name}}</option>
+              {{end}}
+            {{end}}
+            </select>
+            <button type="submit" class="btn btn-default">Select</button>
+        </div>
+      </form>
+
+      <form role="form" action="/admin/recipe/add_drink" class="navbar-form navbar-left" method="post">
+        <div class="form-group">
+          <label for="recipe_add" class="col-sm-3 control-label">Add Recipe</label>
+
+          <input type="text" class="form-control" name="recipe_add">
+        </div>
+        <button type="submit" class="btn btn-default">Add</button>
+      </form>
+      
+      <form role="form" action="/admin/recipe/add_ingrediant" class="navbar-form navbar-left" method="post"> 
+        <input type="hidden" name="recipe_selection" value="{{.RecipieId}}"> 
+        <table class="table">
+          <tr>
+            <td>Ingrediant</td>
+            <td>Quantity</td>
+            <td>Remove</td>
+          </tr>
+          
+          {{range .RecIngredients}}
+          <tr>
+            <td>{{.Id}} - {{.Name}}</td>
+            <td>{{.Qty}} {{.UoM}}</td>
+            <td><button type="submit" name="remove_ingr" value="{{.Id}}" class="btn btn-default">Remove</button></td>
+          </tr>
+          {{end}}
+
+          <tr>
+            <td>
+              <select name="ingrediant_selection" class="form-control" id="ingrediant_selection">
+              {{range .AllIngredients}}
+              <option value="{{.Id}}">{{.Name}}</option>
+              {{end}}
+              </select>
+            </td>
+            
+            <td><input type="text" class="form-control" name="ingrediant_qty"></td>
+            <td><button type="submit" class="btn btn-default">Add</button></td>
+          </tr>
+        </table>
+      </form>
+
+      
 {{end}}

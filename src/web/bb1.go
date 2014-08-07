@@ -21,6 +21,7 @@ const ORDER_FMT = "%05d"
 type Recipe struct {
   Id   int
   Name string
+  Selected bool
 }
 
 type DrinksMenu struct {
@@ -69,7 +70,7 @@ type DispenserDetails struct {
 type AdminRecipeIngr struct {
   Id    int
   Name  string
-  qty   int
+  Qty   int
   UoM   string
 }
 
@@ -225,18 +226,72 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   // Open database
   db := getDBConnection()
   defer db.Close()
+  r.ParseForm()
+  
+  fmt.Printf("[%#v]\n", r.FormValue("remove_ingr"))
+  
+  recipe_id, err := strconv.Atoi(r.Form.Get("recipe_selection"))
+  if err != nil {
+    recipe_id = -1  
+  } 
 
   if (param == "add_drink") {
     // returned form is receipe_name=<drink name entered>
-    r.ParseForm()
 
-    _, err := db.Exec("insert into recipe (name) values (?)", r.Form.Get("new_drink_name"))
+    _, err := db.Exec("insert into recipe (name) values (?)", r.Form.Get("recipe_add"))
     if err != nil {
       panic(fmt.Sprintf("Failed to update db: %v", err))
     }
     
     http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
     return
+  }
+  
+  if (param == "add_ingrediant") {
+    // returned form is wanting to add an ingrediant to a drink
+// NSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty) SELECT r.id, i.id, 4, 1 FROM recipe r, ingredient i WHERE r.name = 'Gin and tonic (lemon lime)' AND i.name = 'Lemon'; 
+
+    ingredient_id, err := strconv.Atoi(r.Form.Get("ingrediant_selection"))
+    if err != nil {
+      http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+    }
+    
+    ingredient_id_remove, err := strconv.Atoi(r.Form.Get("remove_ingr"))
+    if err != nil {
+      ingredient_id_remove = -1
+    }
+    ingredient_qty, err := strconv.Atoi(r.Form.Get("ingrediant_qty"))
+    if err != nil {
+      http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+    }
+    
+    if ingredient_id_remove > 0 {
+      _, err := db.Exec("delete from recipe_ingredient where recipe_id=? and ingredient_id=? ", recipe_id, ingredient_id_remove)
+      if err != nil {
+        panic(fmt.Sprintf("Failed to update db: %v", err))
+      }
+    } else {
+
+      // get next seq number
+      var seq_num int
+      row := db.QueryRow("select max(seq)+1 from recipe_ingredient where recipe_id=?", recipe_id)
+      err = row.Scan(&seq_num)
+      if err == sql.ErrNoRows {
+        seq_num = 1
+      } else {
+        if err != nil {
+          http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+        }
+      }
+        
+      
+      _, err = db.Exec("insert into recipe_ingredient (recipe_id, ingredient_id, seq, qty) values (?, ?, ?, ?)", recipe_id, ingredient_id, seq_num, ingredient_qty)
+      if err != nil {
+        panic(fmt.Sprintf("Failed to update db (add ingrediant): %v", err))
+      }
+    }
+    //  http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+  //   return
   }
   
   var adminR AdminRecipe
@@ -251,6 +306,11 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   for rows.Next() {
     var recipe Recipe
     rows.Scan(&recipe.Id, &recipe.Name)
+    if r.Form.Get("recipe_selection") == strconv.Itoa(recipe.Id) {
+      recipe.Selected = true
+    } else {
+      recipe.Selected = false
+    }
     adminR.Recipes = append(adminR.Recipes, recipe)
   }
   rows.Close()
@@ -270,16 +330,13 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   rows.Close()
   
   // Get a list of all ingrediants in the currently selected drink
-  recipe_id, err := strconv.Atoi(r.Form.Get("new_drink_name"))
-  if err != nil {
-    recipe_id = -1  
-  } 
+  adminR.RecipieId = recipe_id
   
   sqlstr :=  
     `   select
           i.id,  
           i.name,
-          ri.qty,
+          ri.qty * dt.unit_size,
           case when ri.qty = 1 then dt.unit_name else dt.unit_plural end as uom
         from recipe_ingredient ri
         inner join ingredient i on ri.ingredient_id = i.id
@@ -295,7 +352,7 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
 
   for rows.Next() {
     var recipeIngr AdminRecipeIngr
-    rows.Scan(&recipeIngr.Id, &recipeIngr.Name)
+    rows.Scan(&recipeIngr.Id, &recipeIngr.Name, &recipeIngr.Qty, &recipeIngr.UoM)
     adminR.RecIngredients = append(adminR.RecIngredients, recipeIngr)
   }
   rows.Close()
