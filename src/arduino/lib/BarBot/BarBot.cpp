@@ -46,7 +46,8 @@ BarBot::BarBot()
   _stepper->setAcceleration(MAX_ACCEL);
   _stepper->setPinsInverted(false,false,false,false,true);
   _stepper->setEnablePin(4);
-  //_stepper->disableOutputs();
+  _stepper->disableOutputs();
+  _stepper->run();
   
   set_state(BarBot::IDLE);
   _current_instruction = 0;
@@ -170,7 +171,7 @@ bool BarBot::exec_instruction(uint16_t ins)
 
     case ZERO:
       _stepper->setMaxSpeed(SPEED_ZERO);
-      move_to(-500);  // TODO: suitable value
+      move_to(-7300);  // TODO: suitable value
       _stepper->run();
       break;
   }
@@ -302,10 +303,13 @@ void BarBot::set_state(barbot_state new_state)
     // Stop platform
     _stepper->stop();
 
+    _stepper->run();
+    
     // Stop all dispensers
     for (int ix=1; ix < DISPENSER_COUNT; ix++)
       if (_dispeners[ix] != NULL)
         _dispeners[ix]->stop();
+    _stepper->disableOutputs();
   }
   
   // Don't allow leaving FAULT state if emergency stop pressed

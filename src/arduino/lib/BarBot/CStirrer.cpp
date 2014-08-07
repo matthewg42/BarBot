@@ -10,15 +10,14 @@ CStirrer::CStirrer(uint8_t pin)
 {
   _pin = pin;
   pinMode(_pin, OUTPUT);
-  digitalWrite(_pin, HIGH);
+  digitalWrite(_pin, LOW);
   _last_used = millis();
   _state = CStirrer::IDLE;
-  _pulse_sent = false;
 }
 
 CStirrer::~CStirrer()
 {
-  digitalWrite(_pin, HIGH);
+  digitalWrite(_pin, LOW);
 }
 
 uint8_t CStirrer::get_dispener_type()
@@ -34,8 +33,7 @@ bool CStirrer::dispense(uint8_t qty)
   _state = CStirrer::BUSY;
 
   _dispense_start = millis();
-  digitalWrite(_pin, LOW);
-  _pulse_sent = false; // Well, it's been started...
+  digitalWrite(_pin, HIGH);
 
   return true;
 };
@@ -45,15 +43,11 @@ bool CStirrer::loop()
   if (_state != CStirrer::BUSY)
     return true;
 
-  if ((!_pulse_sent) && millis()-_dispense_start >= 10) // 10 ms pulse
-  {
-     digitalWrite(_pin, HIGH);
-     _pulse_sent = true;
-  }
-  else if (millis()-_dispense_start > STIRRER_TIME)
+  if (millis()-_dispense_start > STIRRER_TIME)
   {
     // Done!
     _state = CStirrer::IDLE;
+    digitalWrite(_pin, LOW);
   }
 
   return false;
@@ -61,7 +55,7 @@ bool CStirrer::loop()
 
 void CStirrer::stop()
 {
-  // the stirrer can't be stopped once started
+  digitalWrite(_pin, LOW);
   _state = CStirrer::IDLE;
 }
 

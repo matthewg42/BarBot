@@ -3,7 +3,7 @@
 
 #include "CDispenser.h"
 
-#define STIRRER_TIME 8000 // Time the stirrer takes in ms
+#define STIRRER_TIME 10000 // Time the stirrer takes in ms
 
 #include "Arduino.h"
 #include <avr/pgmspace.h>
@@ -22,7 +22,6 @@ class CStirrer : public CDispenser
   private:
     unsigned long long _dispense_start;
     int _pin;
-    bool _pulse_sent;
 
 };
 

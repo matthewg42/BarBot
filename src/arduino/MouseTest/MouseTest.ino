@@ -38,8 +38,8 @@ int dispenserPositions[] = { 0, 546, 1093, 1640, 2187, 2734, 3117, 3417, 3746, 4
 
 Servo servoOptic[6];
 uint8_t opticServoPin[]        = { 40, 42, 44, 46, 48, 50 };
-uint8_t opticServoClosedPos[]  = { 10, 10, 10, 65, 10, 10 };
-uint8_t opticServoOpenPos[]    = { 65, 65, 65, 10, 65, 65 };
+uint8_t opticServoClosedPos[]  = { 10, 65, 10, 65, 10, 10 };
+uint8_t opticServoOpenPos[]    = { 65, 10, 65, 10, 65, 65 };
 uint8_t opticServoServicePos[] = {  0,  0,  0, 75,  0,  0 };
 
 Servo servoMixer[6];

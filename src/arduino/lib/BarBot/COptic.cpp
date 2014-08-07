@@ -5,12 +5,12 @@
 COptic::COptic(uint8_t servo_pin, uint8_t open_pos, uint8_t closed_pos)
 {
   _servo.attach(servo_pin);
-  _servo.write(_closed_pos);
   _last_used = millis();
   _state = COptic::IDLE;
   _dispense_started = false;
   _closed_pos = closed_pos;
   _open_pos = open_pos;
+  _servo.write(_closed_pos);
 }
 
 COptic::~COptic()

@@ -12,11 +12,11 @@ BarBot *bb;
 
 void setup()
 {
+  bb = new BarBot();
   Serial.begin(9600);      // For debug info only
   Serial2.begin(115200);   // Communication with Pi
- 
   Serial.println("Start!");
-  bb = new BarBot();
+  
 }
 
 void loop()

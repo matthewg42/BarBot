@@ -1,5 +1,7 @@
 #include "CMixer.h"
 
+/* mixer dispenser - qty is ml to dispense */
+
 CMixer::CMixer(uint8_t servo_pin)
 {
   _servo.attach(servo_pin);
@@ -22,12 +24,12 @@ bool CMixer::dispense(uint8_t qty)
 {
   if (_state != CMixer::IDLE)
     return false;
-  
+
   _state = CMixer::BUSY;
   _dispense_start = millis();
   _servo.write(MIXER_DISPENSE_POSITION);
-  _dispense_time = qty;
-    
+  _dispense_time = (qty * ML_PER_MS);
+
   return false;
 };
 

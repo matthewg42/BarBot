@@ -3,6 +3,7 @@
 
 #define MIXER_IDLE_POSITION       140
 #define MIXER_DISPENSE_POSITION    65
+#define ML_PER_MS                  36  // how many ms to dispense 1ml
 
 
 #include "CMixer.h"
