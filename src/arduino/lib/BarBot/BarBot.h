@@ -27,7 +27,7 @@
 #define DISPENSER_COUNT      21   // Number of attached dispensers. If altered, also need to change BarBot::BarBot()
 #define ZERO_SWITCH          52   // Zero/limit switch
 #define ESTOP_PIN            53   // Emergency stop 
-#define SPEED_ZERO          1200  // Speed when zeroing
+#define SPEED_ZERO           800  // Speed when zeroing
 #define SPEED_NORMAL        1500  // Normal speed
 #define MAX_ACCEL           3000
 

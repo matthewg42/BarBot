@@ -11,7 +11,7 @@ BarBot::BarBot()
     switch(ix)
     {
       case 1:  _dispeners[ix] = new COptic(40, 65, 10); break; // Optic0
-      case 2:  _dispeners[ix] = new COptic(42, 65, 10); break; // Optic1
+      case 2:  _dispeners[ix] = new COptic(42, 10, 65); break; // Optic1
       case 3:  _dispeners[ix] = new COptic(44, 65, 10); break; // Optic2
       case 4:  _dispeners[ix] = new COptic(46, 10, 65); break; // Optic3
       case 5:  _dispeners[ix] = new COptic(48, 65, 10); break; // Optic4

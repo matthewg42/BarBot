@@ -3,7 +3,7 @@
 
 #include "CDispenser.h"
 
-#define STIRRER_TIME 10000 // Time the stirrer takes in ms
+#define STIRRER_TIME 13000 // Time the stirrer takes in ms
 
 #include "Arduino.h"
 #include <avr/pgmspace.h>
