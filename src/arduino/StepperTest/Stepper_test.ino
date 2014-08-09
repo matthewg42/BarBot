@@ -247,7 +247,7 @@ void serialEvent()
       analogWrite(6,0);
       break;
       
-    case 'J':
+    case 'J':   // this code sucks!
     case 'j':
       analogWrite(5,150);
       analogWrite(6,0);
@@ -256,11 +256,16 @@ void serialEvent()
       analogWrite(6,0);
       break;
 
-    case 'K':
+    case 'K':  // this code dispenses, but then sucks a little
     case 'k':
       analogWrite(5,0);
       analogWrite(6,150);
-      delay(500);
+      delay(200);
+      analogWrite(5,0);
+      analogWrite(6,0);
+      analogWrite(5,150);
+      analogWrite(6,0);
+      delay(100);
       analogWrite(5,0);
       analogWrite(6,0);
       break;
