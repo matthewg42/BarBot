@@ -10,6 +10,8 @@ void setMixer(uint8_t id, uint8_t pos);
 void mixerFlourish(void);
 void opticFlourish(void);
 void printHelp(void);
+void dasherDispense(uint8_t id);
+void dasherFlourish(void);
 
 #define CMD_BUF_SZ          4
 
@@ -32,6 +34,9 @@ void printHelp(void);
 #define CONVEYOR_PIN        38
 #define CONVEYOR_SENSOR_PIN 39
 
+#define ZERO_PIN            52
+#define STOP_PIN            53
+
 #define LAST_DISPENSER_ID   18
 
 int dispenserPositions[] = { 0, 546, 1093, 1640, 2187, 2734, 3117, 3417, 3746, 4057, 4375, 4714, 5058, 5332, 5605, 5900, 6335, 6792, 7000 };
@@ -46,6 +51,9 @@ Servo servoMixer[6];
 uint8_t mixerServoPin[]       = { 41, 43, 45, 47, 49, 51 };
 uint8_t mixerServoClosedPos[] = { 140, 140, 140, 140, 140, 140 };
 uint8_t mixerServoOpenPos[]   = { 65, 65, 65, 65, 65, 65 };
+
+uint8_t dasherPinIn[]  = { 22, 24, 26 };
+uint8_t dasherPinOut[] = { 23, 25, 27 };
 
 AccelStepper stepper(AccelStepper::DRIVER);
 
@@ -79,10 +87,10 @@ void setup()
     digitalWrite(UMBRELLA_PIN,LOW);
 
     pinMode(LEMON_PIN,OUTPUT);
-    digitalWrite(LEMON_PIN,LOW);
+    digitalWrite(LEMON_PIN,HIGH);
 
     pinMode(STIRRER_PIN,OUTPUT);
-    digitalWrite(STIRRER_PIN,LOW);
+    digitalWrite(STIRRER_PIN,HIGH);
 
     pinMode(CONVEYOR_PIN,OUTPUT); // Conveyor
     pinMode(CONVEYOR_SENSOR_PIN,INPUT_PULLUP);
@@ -90,6 +98,13 @@ void setup()
 
     pinMode(ZERO_SWITCH_PIN,INPUT_PULLUP);  // zero switch
     pinMode(EMERGENCY_STOP_PIN,INPUT_PULLUP);  // emergency stop switch
+
+    // Set up dashers
+    for (uint8_t i=0; i<3; i++) {
+        pinMode(dasherPinIn[i],INPUT_PULLUP);
+        pinMode(dasherPinOut[i],OUTPUT);
+        digitalWrite(dasherPinOut[i],LOW);
+    }
 
     Serial.begin(9600);
     delay(100);
@@ -160,21 +175,25 @@ void handleCmd(void) {
         Serial.println(id);
         gotoDispenser(id);
         break;
-    case 'M':
+    case 'D':
         if (cmdbuf[1] == 'F') {
-            mixerFlourish();
-        }
-        else if (cmdbuf[1] == 'O') {
-            id = atoi(cmdbuf+2);
-            setMixer(id, POS_OPEN);
-        }
-        else if (cmdbuf[1] == 'C') {
-            id = atoi(cmdbuf+2);
-            setMixer(id, POS_CLOSED);
+            dasherFlourish();
         }
         else if (cmdbuf[1] == 'D') {
             id = atoi(cmdbuf+2);
-            setMixer(id, POS_DISPENSE);
+            dasherDispense(id);
+        }
+        else { 
+            bad = true; 
+        }
+        break;
+     case 'M':
+        if (cmdbuf[1] == 'F') {
+            dasherFlourish();
+        }
+        else if (cmdbuf[1] == 'D') {
+            id = atoi(cmdbuf+2);
+            dasherDispense(id);
         }
         else { 
             bad = true; 
@@ -312,6 +331,24 @@ void opticFlourish(void) {
     }
 }
 
+void dasherDispense(uint8_t id)
+{
+    digitalWrite(dasherPinOut[id], HIGH);
+    while(!digitalRead(dasherPinIn[id]));
+    while(digitalRead(dasherPinIn[id]));
+    while(!digitalRead(dasherPinIn[id]));
+    while(digitalRead(dasherPinIn[id]));
+    digitalWrite(dasherPinOut[id], LOW);
+}
+
+void dasherFlourish(void)
+{
+    for (uint8_t id=0; id<3; id++) {
+        dasherDispense(id);
+        delay(150);
+    }
+}
+
 void printHelp(void) {
     Serial.println("0000000000111111111");
     Serial.println("0123456789012345678");
@@ -327,6 +364,8 @@ void printHelp(void) {
     Serial.println("MOn : open mix n");
     Serial.println("MCn : close mix n");
     Serial.println("MF  : mixer flourish (warning opens all!)");
+    Serial.println("DDn : dispense dasher n");
+    Serial.println("DF  : dasher flourish (warning opens all!)");
     Serial.println("CD  : conveyor dispense");
     Serial.println("CR  : conveyor reset (stop)");
     Serial.println("CS  : conveyor sensor");
