@@ -19,11 +19,11 @@
 void setup()
 {
   pinMode(IN4,OUTPUT);
-  digitalWrite(IN4,LOW);
+  pinMode(TRIG,INPUT_PULLUP);
 
+  digitalWrite(IN4,LOW);
   analogWrite(IN1,0);
   analogWrite(IN3,0);
-
 }
 
 void loop()
