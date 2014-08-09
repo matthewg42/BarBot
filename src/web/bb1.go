@@ -77,6 +77,7 @@ type AdminRecipeIngr struct {
 type AdminRecipe struct {
   RecipieName     string
   RecipieId       int
+  RecipieSelected bool
   Recipes         []Recipe
   AllIngredients  []AdminRecipeIngr  // All known ingrediants for "Add" listbox
   RecIngredients  []AdminRecipeIngr  // Ingrediants in currently selected receipe
@@ -228,8 +229,6 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   defer db.Close()
   r.ParseForm()
   
-  fmt.Printf("[%#v]\n", r.FormValue("remove_ingr"))
-  
   recipe_id, err := strconv.Atoi(r.Form.Get("recipe_selection"))
   if err != nil {
     recipe_id = -1  
@@ -237,14 +236,26 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
 
   if (param == "add_drink") {
     // returned form is receipe_name=<drink name entered>
+    if len(r.Form.Get("recipe_add")) <= 1 {
+      http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+    return
+  }
 
     _, err := db.Exec("insert into recipe (name) values (?)", r.Form.Get("recipe_add"))
     if err != nil {
       panic(fmt.Sprintf("Failed to update db: %v", err))
     }
     
-    http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
-    return
+    // get inserted id
+    row := db.QueryRow("select max(id) from recipe")
+    err = row.Scan(&recipe_id)
+    if err != nil {
+      http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+      return
+    }
+    
+    // http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+    // return
   }
   
   if (param == "add_ingrediant") {
@@ -262,7 +273,12 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
     }
     ingredient_qty, err := strconv.Atoi(r.Form.Get("ingrediant_qty"))
     if err != nil {
-      http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+      ingredient_qty = -1
+    }
+    
+    // Default to a quantity of 1 if nothing entered or invalid entry
+    if ingredient_qty <= 0 {
+      ingredient_qty = 1
     }
     
     if ingredient_id_remove > 0 {
@@ -276,12 +292,8 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
       var seq_num int
       row := db.QueryRow("select max(seq)+1 from recipe_ingredient where recipe_id=?", recipe_id)
       err = row.Scan(&seq_num)
-      if err == sql.ErrNoRows {
+      if err != nil {
         seq_num = 1
-      } else {
-        if err != nil {
-          http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
-        }
       }
         
       
@@ -295,6 +307,12 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   }
   
   var adminR AdminRecipe
+  if (recipe_id > 0) {
+    adminR.RecipieSelected = true
+  } else
+  {
+    adminR.RecipieSelected = false
+  }
   
   // Get a list of all drinks for list box
   rows, err := db.Query("select r.id, r.name  from recipe r order by r.name")
@@ -306,7 +324,7 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   for rows.Next() {
     var recipe Recipe
     rows.Scan(&recipe.Id, &recipe.Name)
-    if r.Form.Get("recipe_selection") == strconv.Itoa(recipe.Id) {
+    if recipe_id == recipe.Id {
       recipe.Selected = true
     } else {
       recipe.Selected = false
