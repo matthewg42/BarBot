@@ -53,8 +53,11 @@ BarBot::BarBot()
   _current_instruction = 0;
   _stepper_target = 0;
   
-  pinMode(ZERO_SWITCH, INPUT_PULLUP);
-  pinMode(ESTOP_PIN  , INPUT_PULLUP);
+  pinMode(ZERO_SWITCH    , INPUT_PULLUP);
+  pinMode(ESTOP_PIN      , INPUT_PULLUP);
+  pinMode(GLASS_SENSE_PIN, INPUT_PULLUP);
+  
+  //digitalWrite(14, LOW);
 }
 
 BarBot::~BarBot()
@@ -129,12 +132,17 @@ bool BarBot::go()
   
   _current_instruction = 0;
   
-  
-  exec_instruction(_current_instruction);
+  if (!glass_present())
+  {
+    debug("Wait for glass");
+    set_state(BarBot::WAITING); // Waiting for glass
+  } else
+  {
+    exec_instruction(_current_instruction);
     
-  set_state(BarBot::RUNNING);
-    
-  
+    set_state(BarBot::RUNNING);
+  }
+
   return true;
 }
 
@@ -171,7 +179,7 @@ bool BarBot::exec_instruction(uint16_t ins)
 
     case ZERO:
       _stepper->setMaxSpeed(SPEED_ZERO);
-      move_to(-7300);  // TODO: suitable value
+      move_to(14000);  // TODO: suitable value
       _stepper->run();
       break;
   }
@@ -197,12 +205,18 @@ bool BarBot::loop()
   
   // Double check - if the limit switch is ever hit, always stop the platform
   if 
-  (
+  ((
     (digitalRead(ZERO_SWITCH) == LOW) &&   // Limit switch hit
-    (_stepper_target > 0) &&               // We're not aiming for it
+    (_stepper_target < MAX_RAIL_POSITION) &&               // We're not aiming for it
     (millis()-_move_start > 250) &&        // Current move has been in progress for a while (i.e. plenty of time to have moved off the limit switch)
     (_state != BarBot::FAULT)              // We've not already faulted.
-  )
+  ) ||
+  ( 
+    (digitalRead(ZERO_SWITCH) == LOW) &&
+    (_stepper->distanceToGo() > 15) &&
+    (_state != BarBot::FAULT) &&
+    (millis()-_move_start > 250) 
+  ))
   {
     debug("Error: limit switch unexpectedly hit!");
     set_state(BarBot::FAULT);
@@ -215,6 +229,26 @@ bool BarBot::loop()
   {
     debug("ESTOP");
     set_state(BarBot::FAULT);
+  }
+  
+  // If waiting (for a glass), and a glass is now present, start making the drink
+  if (_state == BarBot::WAITING)
+  {
+    if (glass_present())
+    {
+      exec_instruction(_current_instruction);
+        
+      set_state(BarBot::RUNNING);
+      return false;
+    }
+  }
+  
+  // If in the process of making a drink, and the glass has been removed, stop
+  if ((_state == BarBot::RUNNING) && (!glass_present()))
+  {
+    debug("Glass removed.");
+    set_state(BarBot::FAULT);
+    return false;
   }
 
   // If running, find out if the last executed insturction has finished 
@@ -258,7 +292,7 @@ bool BarBot::loop()
         {
           done = true;
           _stepper->stop();
-          _stepper->setCurrentPosition(0);
+          _stepper->setCurrentPosition(MAX_RAIL_POSITION);
           // _stepper->disableOutputs();
           _stepper->setMaxSpeed(SPEED_NORMAL);
         } 
@@ -348,7 +382,24 @@ BarBot::barbot_state BarBot::get_state()
   return _state;
 }
    
-void debug(char *msg)
+bool BarBot::glass_present()
+{
+  return true;
+  
+  
+
+  if (digitalRead(GLASS_SENSE_PIN) == LOW)
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+   
+   void debug(char *msg)
 {
   Serial.println(msg);
 }
+

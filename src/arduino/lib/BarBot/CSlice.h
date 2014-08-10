@@ -7,7 +7,8 @@
 #include "Arduino.h"
 #include <avr/pgmspace.h>
 
-#define SLICE_TIME   3000 // Time in ms to wait for a slice to be dispensed
+#define SLICE_TIME   5000 // Time in ms to wait for a slice to be dispensed
+#define SLICE_PULSE    50
 
 class CSlice : public CDispenser
 {
