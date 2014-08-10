@@ -7,6 +7,7 @@ DROP TABLE recipe;
 DROP TABLE ingredient;
 DROP TABLE dispenser;
 DROP TABLE dispenser_type;
+DROP TABLE glass_type;
 
 CREATE TABLE drink_order (
 	id                INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,7 +23,8 @@ CREATE TABLE drink_order (
 CREATE TABLE recipe ( 
 	id                INTEGER PRIMARY KEY AUTOINCREMENT,
  	name              TEXT NOT NULL,
-	show_in_menu      BOOLEAN NOT NULL DEFAULT FALSE
+	show_in_menu      BOOLEAN NOT NULL DEFAULT FALSE,
+ 	glass_type_id     REFERENCES glass_type(id)
 );
 
 CREATE TABLE ingredient (
@@ -47,7 +49,8 @@ CREATE TABLE dispenser_type (
 	name              VARCHAR(255) NOT NULL,
 	unit_name         VARCHAR(32) NOT NULL,
 	unit_plural       VARCHAR(32) NOT NULL,
-	unit_size         INTEGER NOT NULL
+	unit_size         INTEGER NOT NULL,
+ 	manual            BOOLEAN NOT NULL DEFAULT FALSE 
 );
 
 CREATE TABLE dispenser (
@@ -57,4 +60,11 @@ CREATE TABLE dispenser (
 	name              VARCHAR(64),
 	rail_position     INTEGER NOT NULL
 );
+
+CREATE TABLE glass_type (
+  id                INTEGER PRIMARY KEY,
+  name              VARCHAR(255),
+  size_ml           INTEGER
+);
+
 

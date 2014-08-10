@@ -21,6 +21,18 @@
           <label for="recipe_add" class="col-sm-3 control-label">Add Recipe</label>
 
           <input type="text" class="form-control" name="recipe_add">
+          
+          
+          
+          <select name="glass_selection" class="form-control" id="glass_selection">
+          {{range .GlassTypes}}
+            {{if .Selected}}
+            <option value="{{.Id}}" selected>{{.Name}}</option>
+            {{else}}
+            <option value="{{.Id}}">{{.Name}}</option>
+            {{end}}
+          {{end}}
+          </select>
         </div>
         <button type="submit" class="btn btn-default">Add</button>
       </form>

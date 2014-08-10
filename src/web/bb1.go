@@ -21,6 +21,7 @@ type Recipe struct {
   Id   int
   Name string
   Selected bool
+  Glass_type_id int
 }
 
 type DrinksMenu struct {
@@ -79,11 +80,18 @@ type AdminRecipeIngr struct {
   UoM   string
 }
 
+type GlassType struct {
+  Id              int
+  Name            string
+  Selected        bool
+}
+
 type AdminRecipe struct {
   RecipieName     string
   RecipieId       int
   RecipieSelected bool
   Recipes         []Recipe
+  GlassTypes      []GlassType
   AllIngredients  []AdminRecipeIngr  // All known ingrediants for "Add" listbox
   RecIngredients  []AdminRecipeIngr  // Ingrediants in currently selected receipe
 }
@@ -243,10 +251,17 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
     // returned form is receipe_name=<drink name entered>
     if len(r.Form.Get("recipe_add")) <= 1 {
       http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
-    return
-  }
+      return
+    }
+    
+    // Get glass selection
+    glass_type_id, err := strconv.Atoi(r.Form.Get("glass_selection"))
+    if err != nil {
+      http.Redirect(w, r, "/admin/recipe/", http.StatusSeeOther)
+      return
+    }     
 
-    _, err := db.Exec("insert into recipe (name) values (?)", r.Form.Get("recipe_add"))
+    _, err = db.Exec("insert into recipe (name, glass_type_id) values (?, ?)", r.Form.Get("recipe_add"), glass_type_id)
     if err != nil {
       panic(fmt.Sprintf("Failed to update db: %v", err))
     }
@@ -311,7 +326,9 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   //   return
   }
   
-  var adminR AdminRecipe
+  var adminR AdminRecipe 
+  
+  
   if (recipe_id > 0) {
     adminR.RecipieSelected = true
   } else
@@ -320,23 +337,44 @@ func adminRecipe(w http.ResponseWriter, r *http.Request, param string) {
   }
   
   // Get a list of all drinks for list box
-  rows, err := db.Query("select r.id, r.name  from recipe r order by r.name")
+  rows, err := db.Query("select r.id, r.name, r.glass_type_id from recipe r order by r.name")
   if err != nil {
     panic(fmt.Sprintf("%v", err))
   }
   defer rows.Close()
-
+  glass_type_id := -1
+  var tmp_glass_type_id int
   for rows.Next() {
     var recipe Recipe
-    rows.Scan(&recipe.Id, &recipe.Name)
+    rows.Scan(&recipe.Id, &recipe.Name, &tmp_glass_type_id)
     if recipe_id == recipe.Id {
       recipe.Selected = true
+      glass_type_id = tmp_glass_type_id
     } else {
       recipe.Selected = false
     }
     adminR.Recipes = append(adminR.Recipes, recipe)
   }
   rows.Close()
+  
+  // Get a list of glass types for the glass selection listbox
+  rows, err = db.Query("select g.id, g.name from glass_type g order by g.name")
+  if err != nil {
+    panic(fmt.Sprintf("%v", err))
+  }
+  defer rows.Close()
+
+  for rows.Next() {
+    var glass GlassType
+    rows.Scan(&glass.Id, &glass.Name)
+    if glass.Id == glass_type_id {
+      glass.Selected = true
+    } else {
+      glass.Selected = false
+    }
+    adminR.GlassTypes = append(adminR.GlassTypes, glass)
+  }
+  rows.Close()    
  
   // Get a list of all ingrediants for the "add" list box
   rows, err = db.Query("select i.id, i.name from ingredient i order by i.name")
@@ -429,7 +467,9 @@ func adminDispenser(w http.ResponseWriter, r *http.Request, param string) {
       i.id as ingredient_id,
       i.name as ingredient_name
     from dispenser d 
+    inner join dispenser_type dt on dt.id = d.dispenser_type_id
     left outer join ingredient i on d.dispenser_type_id = i.dispenser_type_id
+    where dt.manual = 0
     order by d.id, i.name
   `
 
@@ -888,6 +928,7 @@ func main() {
   BarbotSerialChan = make(chan []string);
   go BBSerial(BarbotSerialChan, *serialPort)
 
+  fmt.Printf("Started...\n")
   http.ListenAndServe(":8080", nil)
 }
 
