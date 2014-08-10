@@ -12,6 +12,8 @@ void opticFlourish(void);
 void printHelp(void);
 void dasherDispense(uint8_t id);
 void dasherFlourish(void);
+void dispenseSyringe(int units);
+void suckSyringe(int units);
 
 #define CMD_BUF_SZ          4
 
@@ -33,6 +35,8 @@ void dasherFlourish(void);
 #define STIRRER_PIN         36
 #define CONVEYOR_PIN        38
 #define CONVEYOR_SENSOR_PIN 39
+#define SYRINGE_SUCK_PIN    5
+#define SYRINGE_SQUIRT_PIN  6
 
 #define ZERO_PIN            52
 #define STOP_PIN            53
@@ -174,6 +178,14 @@ void handleCmd(void) {
         Serial.print("Go ");
         Serial.println(id);
         gotoDispenser(id);
+        break;
+    case 'R':
+        if (cmdbuf[1] == 'D') {
+            dispenseSyringe(atoi(cmdbuf+2));
+        }
+        else if ( cmdbuf[1] == 'S') {
+            suckSyringe(atoi(cmdbuf+2));
+        }
         break;
     case 'D':
         if (cmdbuf[1] == 'F') {
@@ -349,6 +361,31 @@ void dasherFlourish(void)
     }
 }
 
+void dispenseSyringe(int units)
+{
+    Serial.println("dispenseSyringe");
+    analogWrite(SYRINGE_SUCK_PIN,0);
+    analogWrite(SYRINGE_SQUIRT_PIN,150);
+    delay(200);
+    analogWrite(SYRINGE_SUCK_PIN,0);
+    analogWrite(SYRINGE_SQUIRT_PIN,0);
+    
+    analogWrite(SYRINGE_SUCK_PIN,150);
+    analogWrite(SYRINGE_SQUIRT_PIN,0);
+    delay(100);
+    analogWrite(SYRINGE_SUCK_PIN,0);
+    analogWrite(SYRINGE_SQUIRT_PIN,0);
+}
+
+void suckSyringe(int units)
+{
+    analogWrite(SYRINGE_SUCK_PIN,150);
+    analogWrite(SYRINGE_SQUIRT_PIN,0);
+    delay(100*units);
+    analogWrite(SYRINGE_SUCK_PIN,0);
+    analogWrite(SYRINGE_SQUIRT_PIN,0);
+}
+
 void printHelp(void) {
     Serial.println("0000000000111111111");
     Serial.println("0123456789012345678");
@@ -374,3 +411,4 @@ void printHelp(void) {
     Serial.println("U   : umbrella");
     Serial.println("?   : help");
 }
+
