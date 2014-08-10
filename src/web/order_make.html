@@ -12,8 +12,15 @@
   </head>
   <body>
   
+  {{if .Success}}
   <h1> Order sent to barbot!</h1>
-    <a href="/orderlist/complete/{{.OrderId}}" class="btn btn-success btn-lg" role="button">Complete order</a>
-    <a href="/orderlist/" class="btn btn-default btn-lg" role="button">Back</a>
+  <a href="/orderlist/complete/{{.OrderId}}" class="btn btn-success btn-lg" role="button">Complete order</a>
+  <a href="/orderlist/" class="btn btn-default btn-lg" role="button">Back</a>
+  {{else}}
+  <h1> Failed!</h1>
+  Failed to make drink: {{.FailReason}} <br/>
+  <a href="remove/{{.OrderId}}" class="btn btn-danger btn-lg" role="button">Cancel order</a>
+  <a href="/orderlist/" class="btn btn-default btn-lg" role="button">Back</a>  
+  {{end}}
   </body>
 </html>

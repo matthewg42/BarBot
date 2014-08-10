@@ -48,7 +48,9 @@ type OrderLogged struct {
 }
 
 type OrderSent struct {
-  OrderId string
+  OrderId     string
+  Success     bool
+  FailReason  string
 }
 
 type OrderDetails struct {
@@ -101,7 +103,7 @@ const (
 )
 
 
-var MakeDrinkChan chan int
+var BarbotSerialChan chan []string
 
 // showMenu displays the list of available drinks to the user
 func showMenu(db *sql.DB, w http.ResponseWriter) {
@@ -558,15 +560,28 @@ func removeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) b
 
 
 func makeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) bool {
-  // TODO - don't block (error instead)
-
-
   var details OrderSent
   
   drink_order_id, err := strconv.Atoi(p)
   if err != nil {
     return false 
   } 
+  
+  details.OrderId = fmt.Sprintf(ORDER_FMT, drink_order_id)
+  
+  // Generate command list. This will fail if not all the ingrediants are present
+  fmt.Printf("makeOrder: preparing command list for order [%d]\n", drink_order_id)
+  cmdList, ret := getCommandList(drink_order_id)
+  
+  if ret != 0 {
+    fmt.Printf("makeOrder: failed to generate command list!\n")
+    details.Success = false
+    details.FailReason = "Missing ingrediant(s)"
+    t, _ := template.ParseFiles("order_make.html")
+    t.Execute(w, details)
+    return true
+  }
+  details.Success = true
 
   // Record start time of order
   _, err = db.Exec(
@@ -578,9 +593,8 @@ func makeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) boo
     panic(fmt.Sprintf("completeOrder: Failed to update db: %v", err))
   }
   
-  MakeDrinkChan <- drink_order_id
+  BarbotSerialChan <- cmdList
   
-  details.OrderId = fmt.Sprintf(ORDER_FMT, drink_order_id)
   t, _ := template.ParseFiles("order_make.html")
   t.Execute(w, details)
     
@@ -708,7 +722,7 @@ func getDBConnection() *sql.DB {
 }
 
 // BBSerial goroutine manages serial communications with barbot
-func BBSerial(c chan int, serialPort string) {
+func BBSerial(instructionList chan []string, serialPort string) {
   
   // Open serial port
   port := &serial.Config{Name: serialPort, Baud: 115200} 
@@ -738,9 +752,16 @@ func BBSerial(c chan int, serialPort string) {
 
   for {
     select {
-      case drink_order_id := <-c:
-        SendDrink(drink_order_id, s)
-        
+      case cmdList := <-instructionList:
+        for _, cmd := range cmdList {
+          fmt.Printf("> %s\n", cmd)
+          _, err := s.Write([]byte(fmt.Sprintf("%s\n", cmd)))
+          time.Sleep(10 * time.Millisecond) // 10ms delay between each instruction; don't send commands faster than the Arduino can process them
+          if err != nil {
+            panic(fmt.Sprintf("BBSerial: failed to transmit instruction: %v", err))
+          }
+        }
+
       case recieced_msg := <-serialReadChan:
         fmt.Printf("< %s\n", recieced_msg)
     }
@@ -888,8 +909,8 @@ func main() {
   http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
   http.Handle("/", http.FileServer(http.Dir("static")))
   
-  MakeDrinkChan = make(chan int);
-  go BBSerial(MakeDrinkChan, *serialPort)
+  BarbotSerialChan = make(chan []string);
+  go BBSerial(BarbotSerialChan, *serialPort)
 
   http.ListenAndServe(":8080", nil)
 }
