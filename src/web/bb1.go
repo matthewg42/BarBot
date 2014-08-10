@@ -717,10 +717,32 @@ func BBSerial(c chan int, serialPort string) {
     panic(fmt.Sprintf("BBSerial failed to open serial port: %v", err))
   }
   
+
+  serialReadChan := make(chan string)
+ 
+  // read from serial port
+  go func() {
+    buf := make([]byte, 128)
+
+    for {
+      n, err := s.Read(buf)
+      if err != nil {
+        fmt.Printf("Error reading from serial port [%v]\n", err);
+        return
+      }
+      var msg string
+      msg = fmt.Sprintf("%s", buf[:n])
+      serialReadChan <- fmt.Sprintf("%s", strings.Trim(msg, "\r\n"))
+    }
+  }()
+
   for {
     select {
       case drink_order_id := <-c:
         SendDrink(drink_order_id, s)
+        
+      case recieced_msg := <-serialReadChan:
+        fmt.Printf("< %s\n", recieced_msg)
     }
   }
   
