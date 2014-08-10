@@ -10,7 +10,6 @@ import (
   "time"
   "strings"
   "github.com/tarm/goserial"
-  "io"
   "strconv"
   "flag"
 )
@@ -872,29 +871,6 @@ func getIngredientPosition(ingredient_id int) (int, int) {
   fmt.Printf("getIngredientPosition: ingredient_id=[%d] is on dispenser_id=[%d], position=[%d]\n", ingredient_id, dispenser_id, rail_position)
 
   return rail_position,dispenser_id
-}
-
-
-// SendDrink looks up the required ingredients for drink_order_id, and transmits the necessary instructions over serial. Or it will do.
-func SendDrink(drink_order_id int, s io.ReadWriteCloser) {
-
-  fmt.Printf("SendDrink: making drink_order_id=%d\n", drink_order_id)
-  cmdList, ret := getCommandList(drink_order_id)
-  
-  if ret != 0 {
-    fmt.Printf("SendDrink: failed to generate command list!\n")
-    return
-  }
-
-  for _, cmd := range cmdList {
-    fmt.Printf("> %s\n", cmd)
-    _, err := s.Write([]byte(fmt.Sprintf("%s\n", cmd)))
-    time.Sleep(10 * time.Millisecond) // 10ms delay between each instruction; don't send commands faster than the Arduino can process them
-    if err != nil {
-      panic(fmt.Sprintf("SendDrink failed to transmit instruction: %v", err))
-    }
-  }
-
 }
 
 func main() {

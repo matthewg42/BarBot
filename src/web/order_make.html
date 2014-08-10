@@ -19,7 +19,7 @@
   {{else}}
   <h1> Failed!</h1>
   Failed to make drink: {{.FailReason}} <br/>
-  <a href="remove/{{.OrderId}}" class="btn btn-danger btn-lg" role="button">Cancel order</a>
+  <a href="/orderlist/remove/{{.OrderId}}" class="btn btn-danger btn-lg" role="button">Cancel order</a>
   <a href="/orderlist/" class="btn btn-default btn-lg" role="button">Back</a>  
   {{end}}
   </body>
