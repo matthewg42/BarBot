@@ -101,7 +101,7 @@ void setup()
   pinMode(27,OUTPUT); 
   digitalWrite(27,LOW);
 
-  pinMode(52,INPUT_PULLUP);  // zero switch
+  pinMode(37,INPUT_PULLUP);  // zero switch
   pinMode(53,INPUT_PULLUP);  // emergency stop switch
   
   Serial.begin(9600);
@@ -345,7 +345,7 @@ void serialEvent()
 
     case 'T':  // zero switch
     case 't':
-      Serial.println(digitalRead(52));
+      Serial.println(digitalRead(37));
       break;
 
     case 'U':  // emergency stop
