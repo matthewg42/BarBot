@@ -3,7 +3,7 @@
       <form role="form" action="/admin/recipe/select_drink" class="navbar-form navbar-left" method="post">
         <div class="form-group">
           <label for="recipe_selection" class="col-sm-3 control-label">Recipe name</label>
-            <select name="recipe_selection" class="form-control" id="recipe_selection">
+            <select name="recipe_selection" class="form-control" id="recipe_selection" onchange="this.form.submit();">
             {{range .Recipes}}
               {{if .Selected}}
                 <option value="{{.Id}}" selected>{{.Name}}</option>
@@ -25,6 +25,9 @@
         <button type="submit" class="btn btn-default">Add</button>
       </form>
       
+
+      {{if .RecipieSelected}}
+      
       <form role="form" action="/admin/recipe/add_ingrediant" class="navbar-form navbar-left" method="post"> 
         <input type="hidden" name="recipe_selection" value="{{.RecipieId}}"> 
         <table class="table">
@@ -38,7 +41,7 @@
           <tr>
             <td>{{.Id}} - {{.Name}}</td>
             <td>{{.Qty}} {{.UoM}}</td>
-            <td><button type="submit" name="remove_ingr" value="{{.Id}}" class="btn btn-default">Remove</button></td>
+            <td><button type="submit" name="remove_ingr" value="{{.Id}}" class="btn btn-danger">Remove</button></td>
           </tr>
           {{end}}
 
@@ -56,6 +59,8 @@
           </tr>
         </table>
       </form>
+      
+      {{end}}
 
       
 {{end}}

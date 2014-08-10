@@ -7,14 +7,15 @@ CSlice::CSlice(uint8_t pin)
 {
   _pin = pin;
   pinMode(_pin, OUTPUT);
-  digitalWrite(_pin, LOW);
+  digitalWrite(_pin, HIGH);
   _last_used = millis();
   _state = CSlice::IDLE;
+  _pulse_sent = false;
 }
 
 CSlice::~CSlice()
 {
-  digitalWrite(_pin, LOW);
+  digitalWrite(_pin, HIGH);
 }
 
 uint8_t CSlice::get_dispener_type()
@@ -30,21 +31,32 @@ bool CSlice::dispense(uint8_t qty)
   _state = CSlice::BUSY;
 
   _dispense_start = millis();
-  digitalWrite(_pin, HIGH);
+  _pulse_sent = false;  
+  digitalWrite(_pin, LOW);
 
   return true;
-};
+}
 
 bool CSlice::loop()
 {
   if (_state != CSlice::BUSY)
     return true;
-
-  if (millis()-_dispense_start > SLICE_TIME)
+  
+  if (!_pulse_sent)
   {
-    // Done!
-    _state = CSlice::IDLE;
-    digitalWrite(_pin, LOW);
+    if (millis()-_dispense_start > SLICE_PULSE)
+    {
+      _pulse_sent = true;
+      digitalWrite(_pin, HIGH);
+    }
+  } 
+  else
+  {
+    if (millis()-_dispense_start > (SLICE_PULSE + SLICE_TIME))
+    {
+      // Done!
+      _state = CSlice::IDLE;
+    }
   }
 
   return false;
@@ -52,7 +64,7 @@ bool CSlice::loop()
 
 void CSlice::stop()
 {
-  digitalWrite(_pin, LOW);
+  //digitalWrite(_pin, LOW);
   _state = CSlice::IDLE;
 }
 

@@ -47,6 +47,10 @@ type OrderLogged struct {
   OrderId string
 }
 
+type OrderSent struct {
+  OrderId string
+}
+
 type OrderDetails struct {
   DrinkName string
   Alcohol   bool
@@ -466,7 +470,7 @@ func orderListHandler(w http.ResponseWriter, r *http.Request) {
     defer db.Close()
 
 
-    sqlstr := "select id from drink_order where cancelled = 0"
+    sqlstr := "select id from drink_order where cancelled = 0 and made_end_ts is null"
 
     rows, err := db.Query(sqlstr)
     if err != nil {
@@ -494,6 +498,12 @@ func orderListHandler(w http.ResponseWriter, r *http.Request) {
 
         case strings.HasPrefix(p, "make/"):
           if !makeOrder(db, w, r, p[len("make/"):]) {
+            http.NotFound(w, r)
+          }
+          return
+          
+        case strings.HasPrefix(p, "complete/"):
+          if !completeOrder(db, w, r, p[len("complete/"):]) {
             http.NotFound(w, r)
           }
           return
@@ -536,7 +546,6 @@ func removeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) b
     update drink_order 
     set cancelled = ?
     where id = ?
-      and made_start_ts is null
       and made_end_ts is null`
       
   _, err := db.Exec(sqlstr, true, p)
@@ -550,17 +559,55 @@ func removeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) b
 
 func makeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) bool {
   // TODO - don't block (error instead)
-  //      - update database 
+
+
+  var details OrderSent
   
   drink_order_id, err := strconv.Atoi(p)
   if err != nil {
-    return false   
+    return false 
   } 
+
+  // Record start time of order
+  _, err = db.Exec(
+    "update drink_order set made_start_ts = ? where id = ?",
+    int32(time.Now().Unix()),
+    drink_order_id,
+  )
+  if err != nil {
+    panic(fmt.Sprintf("completeOrder: Failed to update db: %v", err))
+  }
   
   MakeDrinkChan <- drink_order_id
+  
+  details.OrderId = fmt.Sprintf(ORDER_FMT, drink_order_id)
+  t, _ := template.ParseFiles("order_make.html")
+  t.Execute(w, details)
+    
   return true
 }
 
+// completeOrder marks the drink as made in the database, then redirects to the order list
+func completeOrder(db *sql.DB, w http.ResponseWriter, r *http.Request, p string) bool {
+
+  drink_order_id, err := strconv.Atoi(p)
+  if err != nil {
+    return false 
+  } 
+  
+  _, err = db.Exec(
+    "update drink_order set made_end_ts = ? where id = ?",
+    int32(time.Now().Unix()),
+    drink_order_id,
+  )
+  if err != nil {
+    panic(fmt.Sprintf("completeOrder: Failed to update db: %v", err))
+  }
+  
+  http.Redirect(w, r, "/orderlist/", http.StatusSeeOther)
+  
+  return true
+}
 
 func recipeContainsAlcohol(tx *sql.Tx, recipe_id string) bool {
 

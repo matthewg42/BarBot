@@ -19,17 +19,19 @@
 
 #define MAX_INSTRUCTIONS    100  // Maximum number of instructions that can be stored
 
-#define MAX_MOVE_TIME      19000 // Maximum amount of time moving the platform should take (in ms).
-#define STEPS_PER_CM         48  // Number of steps per CM (platform movement)
-#define MAX_RAIL_POSITION  7010  // Maximum number of steps
+#define MAX_MOVE_TIME      19000  // Maximum amount of time moving the platform should take (in ms).
+#define STEPS_PER_CM          48  // Number of steps per CM (platform movement)
+#define MAX_RAIL_POSITION   7080  // Maximum number of steps
 
 // Harware setup
-#define DISPENSER_COUNT      21   // Number of attached dispensers. If altered, also need to change BarBot::BarBot()
-#define ZERO_SWITCH          52   // Zero/limit switch
-#define ESTOP_PIN            53   // Emergency stop 
+#define DISPENSER_COUNT       21  // Number of attached dispensers. If altered, also need to change BarBot::BarBot()
+#define ZERO_SWITCH           37  // Zero/limit switch. Nb - zero switch is now the 'other' side, i.e. position ~7000
+#define ESTOP_PIN             53  // Emergency stop 
 #define SPEED_ZERO           800  // Speed when zeroing
 #define SPEED_NORMAL        1500  // Normal speed
 #define MAX_ACCEL           3000
+#define GLASS_SENSE_PIN       15 
+
 
 void debug(char *msg);
 
@@ -49,6 +51,7 @@ class BarBot
     enum barbot_state
     {
       IDLE,
+      WAITING,
       RUNNING,
       FAULT
     };
@@ -61,8 +64,6 @@ class BarBot
     bool reset();
     bool loop();
     barbot_state get_state();
-    
-    
 
       
   private:
@@ -86,6 +87,7 @@ class BarBot
     AccelStepper *_stepper;
     long _stepper_target;
     CDispenser *_dispeners[DISPENSER_COUNT];
+    bool glass_present();
 };
 
 #endif
