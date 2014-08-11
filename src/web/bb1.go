@@ -128,8 +128,11 @@ func showMenu(db *sql.DB, w http.ResponseWriter) {
             select null
             from recipe r2
             inner join recipe_ingredient ri on r2.id = ri.recipe_id
+            inner join ingredient i on i.id = ri.ingredient_id
+            inner join dispenser_type dt on dt.id = i.dispenser_type_id
             left outer join dispenser d on cast(d.ingredient_id as integer) = cast(ri.ingredient_id as integer)
-            where d.id is null
+            where d.id is null 
+            and dt.manual = 0
             and r2.id = r.id
           )`)
       if err != nil {
