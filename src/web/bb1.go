@@ -12,6 +12,7 @@ import (
   "github.com/tarm/goserial"
   "strconv"
   "flag"
+  "bufio"
 )
 
 const ORDER_FMT = "%05d"
@@ -237,6 +238,10 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
 
     case strings.HasPrefix(req_page, "recipe/"):
       adminRecipe(w, r, req_page[len("recipe/"):])
+      return;
+      
+    case strings.HasPrefix(req_page, "control/"):
+      adminControl(w, r, req_page[len("control/"):])
       return;
 
     default:
@@ -517,6 +522,39 @@ func adminDispenser(w http.ResponseWriter, r *http.Request, param string) {
   return
 }
 
+func adminControl(w http.ResponseWriter, r *http.Request, param string) {
+  tmpl, _ := template.ParseFiles("admin_header.html", "admin_control.html", "admin_footer.html")
+
+  // Open database
+  db := getDBConnection()
+  defer db.Close()
+
+  sendmsg := true
+  
+  cmdlist := make([]string, 1)
+  
+  switch (param) {
+    case "reset":
+      cmdlist[0] = "R"
+      
+    case "zero":
+      cmdlist[0] = "Z"
+      
+    default:
+      sendmsg = false
+  }
+
+  if (sendmsg) {
+    BarbotSerialChan <- cmdlist
+  }
+
+  tmpl.ExecuteTemplate(w, "admin_header" , nil)
+  tmpl.ExecuteTemplate(w, "admin_control", nil)
+  tmpl.ExecuteTemplate(w, "admin_footer" , nil)
+  return
+}
+
+
 // orderListHandler handles requests to /orderlist/
 func orderListHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -796,17 +834,19 @@ func BBSerial(instructionList chan []string, serialPort string) {
  
   // read from serial port
   go func() {
-    buf := make([]byte, 128)
+    reader := bufio.NewReader(s)
 
     for {
-      n, err := s.Read(buf)
+      buf, err := reader.ReadBytes('\n')
       if err != nil {
         fmt.Printf("Error reading from serial port [%v]\n", err);
         return
       }
       var msg string
-      msg = fmt.Sprintf("%s", buf[:n])
-      serialReadChan <- fmt.Sprintf("%s", strings.Trim(msg, "\r\n"))
+      msg = strings.Trim(fmt.Sprintf("%s", buf),"\n")
+      if (len(buf) > 1) {
+        serialReadChan <- msg
+      }
     }
   }()
 
