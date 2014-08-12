@@ -34,7 +34,7 @@ class CDispenser
 
     CDispenser();
     virtual uint8_t         get_dispener_type()   = 0;
-    virtual bool            dispense(uint8_t qty) = 0;
+    virtual bool            dispense(uint16_t qty) = 0;
     virtual bool            loop()                = 0;
     virtual dispenser_state get_status()          = 0; 
     virtual void            stop()                = 0;

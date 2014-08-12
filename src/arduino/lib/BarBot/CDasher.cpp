@@ -27,7 +27,7 @@ uint8_t CDasher::get_dispener_type()
   return DISPENSER_DASHER;
 }
 
-bool CDasher::dispense(uint8_t qty)
+bool CDasher::dispense(uint16_t qty)
 {
   if (_state != CDasher::IDLE)
     return false;

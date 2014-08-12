@@ -24,7 +24,7 @@ uint8_t CUmbrella::get_dispener_type()
   return DISPENSER_UMBRELLA;
 }
 
-bool CUmbrella::dispense(uint8_t qty)
+bool CUmbrella::dispense(uint16_t qty)
 {
   if (_state != CUmbrella::IDLE)
     return false;

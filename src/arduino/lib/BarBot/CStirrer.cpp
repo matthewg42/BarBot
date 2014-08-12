@@ -26,7 +26,7 @@ uint8_t CStirrer::get_dispener_type()
   return DISPENSER_STIRRER;
 }
 
-bool CStirrer::dispense(uint8_t qty)
+bool CStirrer::dispense(uint16_t qty)
 {
   if (_state != CStirrer::IDLE)
     return false;

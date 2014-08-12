@@ -27,7 +27,7 @@ uint8_t CConveyor::get_dispener_type()
   return DISPENSER_CONVEYOR;
 }
 
-bool CConveyor::dispense(uint8_t qty)
+bool CConveyor::dispense(uint16_t qty)
 {
   if (_state != CConveyor::IDLE)
     return false;

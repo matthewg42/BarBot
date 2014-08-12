@@ -927,11 +927,12 @@ func getCommandList(drink_order_id int) ([]string, int) {
     commandList = append(commandList, fmt.Sprintf("M %d", rail_position))
 
     // Dispense
-    for qty > 0 {
-      qty--
-      if dispenser_type == DISPENSER_MIXER {
-        commandList = append(commandList, fmt.Sprintf("D% d %d", dispenser_id, unit_size))
-      } else {
+    if dispenser_type == DISPENSER_MIXER || dispenser_type == DISPENSER_SYRINGE {
+      // For the mixer and syringe, send qty as the number of milliseconds to dispense for
+      commandList = append(commandList, fmt.Sprintf("D% d %d", dispenser_id, qty * dispenser_param))
+    } else {
+      for qty > 0 {
+        qty--
         commandList = append(commandList, fmt.Sprintf("D% d %d", dispenser_id, dispenser_param))
       }
     }

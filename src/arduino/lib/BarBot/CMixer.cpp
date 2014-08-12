@@ -20,7 +20,8 @@ uint8_t CMixer::get_dispener_type()
   return DISPENSER_MIXER;
 }
 
-bool CMixer::dispense(uint8_t qty)
+// qty = milliseconds to dispense for
+bool CMixer::dispense(uint16_t qty)
 {
   if (_state != CMixer::IDLE)
     return false;
@@ -28,7 +29,7 @@ bool CMixer::dispense(uint8_t qty)
   _state = CMixer::BUSY;
   _dispense_start = millis();
   _servo.write(MIXER_DISPENSE_POSITION);
-  _dispense_time = (qty * ML_PER_MS);
+  _dispense_time = qty ;
 
   return false;
 };

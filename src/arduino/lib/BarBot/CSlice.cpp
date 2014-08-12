@@ -23,7 +23,7 @@ uint8_t CSlice::get_dispener_type()
   return DISPENSER_SLICE;
 }
 
-bool CSlice::dispense(uint8_t qty)
+bool CSlice::dispense(uint16_t qty)
 {
   if (_state != CSlice::IDLE)
     return false;

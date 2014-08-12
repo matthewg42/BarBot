@@ -15,7 +15,7 @@ class CUmbrella : public CDispenser
      CUmbrella(uint8_t pin);
      ~CUmbrella();
      uint8_t          get_dispener_type();
-     bool             dispense(uint8_t qty);
+     bool             dispense(uint16_t qty);
      bool             loop();
      dispenser_state  get_status();
      void             stop();

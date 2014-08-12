@@ -16,7 +16,7 @@ class CSlice : public CDispenser
      CSlice(uint8_t servo_pin);
      ~CSlice();
      uint8_t          get_dispener_type();
-     bool             dispense(uint8_t qty);
+     bool             dispense(uint16_t qty);
      bool             loop();
      dispenser_state  get_status();
      void             stop();

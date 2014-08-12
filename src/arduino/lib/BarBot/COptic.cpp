@@ -23,7 +23,7 @@ uint8_t COptic::get_dispener_type()
   return DISPENSER_OPTIC;
 }
 
-bool COptic::dispense(uint8_t qty)
+bool COptic::dispense(uint16_t qty)
 {
   if (_state != COptic::IDLE)
     return false;
