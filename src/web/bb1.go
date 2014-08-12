@@ -12,6 +12,7 @@ import (
   "github.com/tarm/goserial"
   "strconv"
   "flag"
+  "bufio"
 )
 
 const ORDER_FMT = "%05d"
@@ -34,6 +35,7 @@ type MenuItemIngredient struct {
   Name    string
   ActQty  int
   UoM     string
+  Manual  bool
 }
 
 type MenuItem struct {
@@ -54,11 +56,14 @@ type OrderSent struct {
 }
 
 type OrderDetails struct {
-  DrinkName string
-  Alcohol   bool
-  IdCheck   bool
-  OrderRef  string
-  OrderRefs []string  // list of order refs for order selection list on left of screen
+  DrinkName   string
+  Alcohol     bool
+  Vegan       bool
+  IdCheck     bool
+  OrderRef    string
+  OrderRefs   []string  // list of order refs for order selection list on left of screen
+  Ingredients []MenuItemIngredient
+  Glass       GlassType
 }
 
 type DispenserIngredients struct {
@@ -124,8 +129,11 @@ func showMenu(db *sql.DB, w http.ResponseWriter) {
             select null
             from recipe r2
             inner join recipe_ingredient ri on r2.id = ri.recipe_id
+            inner join ingredient i on i.id = ri.ingredient_id
+            inner join dispenser_type dt on dt.id = i.dispenser_type_id
             left outer join dispenser d on cast(d.ingredient_id as integer) = cast(ri.ingredient_id as integer)
-            where d.id is null
+            where d.id is null 
+            and dt.manual = 0
             and r2.id = r.id
           )`)
       if err != nil {
@@ -161,36 +169,43 @@ func showMenuItem(db *sql.DB, w http.ResponseWriter, r *http.Request) {
         return
       }
 
-      // Get details of the ingredients
-      sql := `
-        select 
-          i.id,
-          i.name, 
-          ri.qty * dt.unit_size as act_act, 
-          case when ri.qty = 1 then dt.unit_name else dt.unit_plural end as uom
-        from recipe r
-        inner join recipe_ingredient ri on ri.recipe_id = r.id
-        inner join ingredient i on i.id = ri.ingredient_id
-        inner join dispenser_type dt on dt.id = i.dispenser_type_id
-        where r.id = ?`
-
-      rows, err := db.Query(sql, drink_id)
-      if err != nil {
-        // TODO
-        panic(fmt.Sprintf("%v", err))
-      }
-      defer rows.Close()
-
-      for rows.Next() {
-        var ingr MenuItemIngredient
-        rows.Scan(&ingr.Id, &ingr.Name, &ingr.ActQty, &ingr.UoM )
-        menuitem.Ingredients = append(menuitem.Ingredients, ingr)
-      }
+      menuitem.Ingredients = getRecipeIngrediants(db, drink_id)
 
       t, _ := template.ParseFiles("menu_item.html")
       t.Execute(w, menuitem)
 }
 
+func getRecipeIngrediants(db *sql.DB, drink_id string) ([]MenuItemIngredient) {
+  var ingrediants []MenuItemIngredient 
+  
+  // Get details of the ingredients
+  sql := `
+    select 
+      i.id,
+      i.name, 
+      ri.qty * dt.unit_size as act_act, 
+      case when ri.qty = 1 then dt.unit_name else dt.unit_plural end as uom,
+      dt.manual
+    from recipe r
+    inner join recipe_ingredient ri on ri.recipe_id = r.id
+    inner join ingredient i on i.id = ri.ingredient_id
+    inner join dispenser_type dt on dt.id = i.dispenser_type_id
+    where r.id = ?`
+
+  rows, err := db.Query(sql, drink_id)
+  if err != nil {
+    panic(fmt.Sprintf("%v", err))
+  }
+  defer rows.Close()
+
+  for rows.Next() {
+    var ingr MenuItemIngredient
+    rows.Scan(&ingr.Id, &ingr.Name, &ingr.ActQty, &ingr.UoM, &ingr.Manual)
+    ingrediants = append(ingrediants, ingr)
+  }  
+
+  return ingrediants
+}
 
 // drinksMenuHandler handles request to "/menu/[n]" - either showing all the drinks available, or details on the selected drink
 func drinksMenuHandler(w http.ResponseWriter, r *http.Request) {
@@ -223,6 +238,10 @@ func adminHandler(w http.ResponseWriter, r *http.Request) {
 
     case strings.HasPrefix(req_page, "recipe/"):
       adminRecipe(w, r, req_page[len("recipe/"):])
+      return;
+      
+    case strings.HasPrefix(req_page, "control/"):
+      adminControl(w, r, req_page[len("control/"):])
       return;
 
     default:
@@ -503,6 +522,39 @@ func adminDispenser(w http.ResponseWriter, r *http.Request, param string) {
   return
 }
 
+func adminControl(w http.ResponseWriter, r *http.Request, param string) {
+  tmpl, _ := template.ParseFiles("admin_header.html", "admin_control.html", "admin_footer.html")
+
+  // Open database
+  db := getDBConnection()
+  defer db.Close()
+
+  sendmsg := true
+  
+  cmdlist := make([]string, 1)
+  
+  switch (param) {
+    case "reset":
+      cmdlist[0] = "R"
+      
+    case "zero":
+      cmdlist[0] = "Z"
+      
+    default:
+      sendmsg = false
+  }
+
+  if (sendmsg) {
+    BarbotSerialChan <- cmdlist
+  }
+
+  tmpl.ExecuteTemplate(w, "admin_header" , nil)
+  tmpl.ExecuteTemplate(w, "admin_control", nil)
+  tmpl.ExecuteTemplate(w, "admin_footer" , nil)
+  return
+}
+
+
 // orderListHandler handles requests to /orderlist/
 func orderListHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -557,14 +609,18 @@ func orderListHandler(w http.ResponseWriter, r *http.Request) {
         select
           do.alcohol,
           do.id_checked,
-          r.name
+          r.name,
+          do.recipe_id,
+          gt.id,
+          gt.name
         from drink_order do
         inner join recipe r on do.recipe_id = r.id
+        inner join glass_type gt on r.glass_type_id = gt.id
         where do.id = ?`
 
       row := db.QueryRow(sqlstr, orderdetails.OrderRef)
-
-      err := row.Scan(&orderdetails.Alcohol, &orderdetails.IdCheck, &orderdetails.DrinkName)
+      var recipe_id string
+      err := row.Scan(&orderdetails.Alcohol, &orderdetails.IdCheck, &orderdetails.DrinkName, &recipe_id, &orderdetails.Glass.Id, &orderdetails.Glass.Name)
       if err == sql.ErrNoRows {
         http.NotFound(w, r)
         return
@@ -573,6 +629,9 @@ func orderListHandler(w http.ResponseWriter, r *http.Request) {
           panic(fmt.Sprintf("orderListHandler - failed to get order details: %#v", err))
         }
       }
+      
+      // Get list of ingrediants
+      orderdetails.Ingredients = getRecipeIngrediants(db, recipe_id)
     }
 
     t, _ := template.ParseFiles("order_list.html")
@@ -775,17 +834,19 @@ func BBSerial(instructionList chan []string, serialPort string) {
  
   // read from serial port
   go func() {
-    buf := make([]byte, 128)
+    reader := bufio.NewReader(s)
 
     for {
-      n, err := s.Read(buf)
+      buf, err := reader.ReadBytes('\n')
       if err != nil {
         fmt.Printf("Error reading from serial port [%v]\n", err);
         return
       }
       var msg string
-      msg = fmt.Sprintf("%s", buf[:n])
-      serialReadChan <- fmt.Sprintf("%s", strings.Trim(msg, "\r\n"))
+      msg = strings.Trim(fmt.Sprintf("%s", buf),"\n")
+      if (len(buf) > 1) {
+        serialReadChan <- msg
+      }
     }
   }()
 
@@ -833,6 +894,7 @@ func getCommandList(drink_order_id int) ([]string, int) {
               inner join ingredient i on i.id = ri.ingredient_id
               inner join dispenser_type dt on dt.id = i.dispenser_type_id
               where do.id = ?
+                and dt.manual = 0
               order by ri.seq`
 
   rows, err := db.Query(sqlstr, drink_order_id)
