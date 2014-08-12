@@ -395,6 +395,37 @@ INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_par
 INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 10, 0 FROM recipe r, ingredient i WHERE r.name = 'Cuba Libre Blanco' AND i.name = 'Lime Juice';
 INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 4, 50, 10 FROM recipe r, ingredient i WHERE r.name = 'Cuba Libre Blanco' AND i.name = 'Cola';
 
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 50, 25 FROM recipe r, ingredient i WHERE r.name = 'St Clements' AND i.name = 'Orange Juice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 50, 10 FROM recipe r, ingredient i WHERE r.name = 'St Clements' AND i.name = 'Bitter Lemon';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 1, 50, 0 FROM recipe r, ingredient i WHERE r.name = 'Caprioska' AND i.name = 'Ice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 2, 3000 FROM recipe r, ingredient i WHERE r.name = 'Caprioska' AND i.name = 'Vodka';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 8, 0 FROM recipe r, ingredient i WHERE r.name = 'Caprioska' AND i.name = 'Lime Juice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 4, 1, 0 FROM recipe r, ingredient i WHERE r.name = 'Caprioska' AND i.name = 'Lime Slice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 5, 1, 0 FROM recipe r, ingredient i WHERE r.name = 'Caprioska' AND i.name = 'Brown Sugar';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 1, 50, 0 FROM recipe r, ingredient i WHERE r.name = 'Horse''s Neck' AND i.name = 'Ice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 1, 3000 FROM recipe r, ingredient i WHERE r.name = 'Horse''s Neck' AND i.name = 'Brandy';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 60, 10 FROM recipe r, ingredient i WHERE r.name = 'Horse''s Neck' AND i.name = 'Ginger Ale';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 4, 2, 0 FROM recipe r, ingredient i WHERE r.name = 'Horse''s Neck' AND i.name = 'Angostura Bitters';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 1, 50, 0 FROM recipe r, ingredient i WHERE r.name = 'Touchdown' AND i.name = 'Ice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 1, 3000 FROM recipe r, ingredient i WHERE r.name = 'Touchdown' AND i.name = 'Bourbon';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 50, 25 FROM recipe r, ingredient i WHERE r.name = 'Touchdown' AND i.name = 'Ice Tea';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 4, 1, 0 FROM recipe r, ingredient i WHERE r.name = 'Touchdown' AND i.name = 'Stir';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 5, 50, 10 FROM recipe r, ingredient i WHERE r.name = 'Touchdown' AND i.name = 'Lemonade';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 1, 1, 3000 FROM recipe r, ingredient i WHERE r.name = 'Indian Summer Shooter' AND i.name = 'Vodka';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 50, 25 FROM recipe r, ingredient i WHERE r.name = 'Indian Summer Shooter' AND i.name = 'Pineapple Juice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 1, 0 FROM recipe r, ingredient i WHERE r.name = 'Indian Summer Shooter' AND i.name = 'Stir';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 4, 1, 3200 FROM recipe r, ingredient i WHERE r.name = 'Indian Summer Shooter' AND i.name = 'Kahlua';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 1, 2, 3500 FROM recipe r, ingredient i WHERE r.name = 'Poke' AND i.name = 'Port';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 100, 10 FROM recipe r, ingredient i WHERE r.name = 'Poke' AND i.name = 'Cola';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 1, 50, 0 FROM recipe r, ingredient i WHERE r.name = 'Ladyboy' AND i.name = 'Ice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 1, 3000 FROM recipe r, ingredient i WHERE r.name = 'Ladyboy' AND i.name = 'Brandy';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 1, 4000 FROM recipe r, ingredient i WHERE r.name = 'Ladyboy' AND i.name = 'Bailey''s Irish Creme';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 4, 1, 0 FROM recipe r, ingredient i WHERE r.name = 'Ladyboy' AND i.name = 'Maraschino Cherry';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 5, 1, 0 FROM recipe r, ingredient i WHERE r.name = 'Ladyboy' AND i.name = 'Cinnamon';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 1, 100, 0 FROM recipe r, ingredient i WHERE r.name = 'Paralyzer' AND i.name = 'Ice';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 2, 1, 3200 FROM recipe r, ingredient i WHERE r.name = 'Paralyzer' AND i.name = 'Kahlua';
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, seq, qty, dispenser_param) SELECT r.id, i.id, 3, 1, 3000 FROM recipe r, ingredient i WHERE r.name = 'Paralyzer' AND i.name = 'Vodka';
+
 INSERT INTO dispenser (id, dispenser_type_id, ingredient_id, name, rail_position) SELECT 1, dispenser_type_id, id, 'Optic 0', 0 FROM ingredient WHERE name = 'Vodka';
 INSERT INTO dispenser (id, dispenser_type_id, ingredient_id, name, rail_position) SELECT 2, dispenser_type_id, id, 'Optic 1', 546 FROM ingredient WHERE name = 'Vodka';
 INSERT INTO dispenser (id, dispenser_type_id, ingredient_id, name, rail_position) SELECT 3, dispenser_type_id, id, 'Optic 2', 1093 FROM ingredient WHERE name = 'Vodka';

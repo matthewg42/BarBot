@@ -4,7 +4,7 @@
 .mode column
 .width 30 6 30 8 20
 
-SELECT      r.name, ri.seq + '.', i.name, ri.qty * dt.unit_size, dt.unit_name
+SELECT      r.name, ri.seq + '.', i.name, ri.qty, dt.unit_size, dt.unit_name
 FROM        recipe_ingredient ri,
             recipe r,
             ingredient i,
