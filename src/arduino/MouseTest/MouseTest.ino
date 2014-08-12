@@ -112,6 +112,7 @@ void setup()
 
     Serial.begin(9600);
     delay(100);
+    digitalWrite(CONVEYOR_PIN,LOW);
     printHelp();
     resetCmdBuf();
 }
@@ -201,11 +202,11 @@ void handleCmd(void) {
         break;
      case 'M':
         if (cmdbuf[1] == 'F') {
-            dasherFlourish();
+            mixerFlourish();
         }
         else if (cmdbuf[1] == 'D') {
             id = atoi(cmdbuf+2);
-            dasherDispense(id);
+            setMixer(id, POS_DISPENSE);
         }
         else { 
             bad = true; 
